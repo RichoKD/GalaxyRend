@@ -33,7 +33,10 @@ export function DashboardHeader({ role = "creator" }: DashboardHeaderProps) {
       <nav className="w-full px-3 sm:px-4 md:px-6 lg:px-8 py-2 sm:py-2.5 md:py-3">
         <div className="flex items-center justify-between min-h-[3.5rem] sm:min-h-[3.75rem] md:min-h-[4rem]">
           {/* Logo/Brand */}
-          <Link href="/" className="flex items-center gap-1 sm:gap-2 group shrink-0">
+          <Link
+            href="/"
+            className="flex items-center gap-1 sm:gap-2 group shrink-0"
+          >
             <Image
               src="/logo.png"
               alt="FluxFrame Logo"
@@ -56,7 +59,7 @@ export function DashboardHeader({ role = "creator" }: DashboardHeaderProps) {
           {/* Action Buttons */}
           <div className="flex items-center gap-1 sm:gap-1.5 md:gap-2">
             <TokenCopyButton />
-            
+
             <Button
               variant="outline"
               size="sm"
