@@ -1,6 +1,6 @@
 import { BentoGrid } from "@/components/BentoGrid";
 import { FooterSection } from "@/components/Footer";
-
+import { AboutSection } from "@/components/AboutSection";
 import HeroSection from "@/components/HeroSection";
 import { IntegrationSection } from "@/components/IntegrationSection";
 import { TestimonialSection } from "@/components/TestimonialSection";
@@ -10,6 +10,7 @@ export default function Home() {
   return (
     <div>
       <HeroSection />
+      <AboutSection />
       {/* <BentoGrid /> */}
       {/* <IntegrationSection /> */}
       {/* <TestimonialSection /> */}
