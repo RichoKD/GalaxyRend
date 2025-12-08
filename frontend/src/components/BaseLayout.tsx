@@ -168,7 +168,7 @@ export default function BaseLayout({
       )}
 
       {/* Spacer for fixed header */}
-      <div className="h-16" />
+      <div className="h-30" />
 
       {/* Main Content */}
       <main className="relative z-10 flex-1">{children}</main>
