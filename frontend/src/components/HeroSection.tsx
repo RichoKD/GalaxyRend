@@ -7,9 +7,9 @@ import Image from "next/image";
 import { WalletConnectButton } from "@/components/WalletConnectButton";
 
 const menuItems = [
-  { name: "For Creators", href: "#" },
-  { name: "For Nodes", href: "#" },
-  { name: "About", href: "#" },
+  { name: "For Creators", href: "/dashboard/creators" },
+  { name: "For Nodes", href: "/dashboard/nodes" },
+  { name: "About", href: "#about" },
 ];
 
 export default function HeroSection() {
