@@ -19,7 +19,7 @@ const testimonials1 = [
     avatar:
       "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-1.webp",
     content:
-      "StarkRender revolutionized my workflow. Post jobs, find talent fast, and results are top-notch.",
+      "FluxFrame revolutionized my workflow. Post jobs, find talent fast, and results are top-notch.",
   },
   {
     name: "Sarah Kim",
@@ -35,7 +35,7 @@ const testimonials1 = [
     avatar:
       "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-3.webp",
     content:
-      "Managing disputes and overseeing the ecosystem is seamless with StarkRender's admin tools.",
+      "Managing disputes and overseeing the ecosystem is seamless with FluxFrame's admin tools.",
   },
   {
     name: "Dinah Macaulay",
@@ -51,7 +51,7 @@ const testimonials1 = [
     avatar:
       "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-5.webp",
     content:
-      "Transparent processes and fair rewards make StarkRender my go-to platform for freelance work.",
+      "Transparent processes and fair rewards make FluxFrame my go-to platform for freelance work.",
   },
   {
     name: "Ryan Park",
@@ -93,7 +93,7 @@ const testimonials2 = [
     avatar:
       "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-4.webp",
     content:
-      "From posting jobs to reviewing submissions, everything flows smoothly on StarkRender.",
+      "From posting jobs to reviewing submissions, everything flows smoothly on FluxFrame.",
   },
   {
     name: "Maya Patel",
@@ -132,7 +132,7 @@ const TestimonialSection = () => {
     <section className="relative py-20 md:py-32 max-w-7xl mx-auto px-6 overflow-hidden">
       <div className="container flex flex-col items-center gap-6 mb-16">
         <h2 className="text-4xl md:text-5xl font-bold text-center">
-          Trusted by StarkRender Community
+          Trusted by FluxFrame Community
         </h2>
         <p className="text-center text-lg md:text-xl text-slate-400 max-w-2xl">
           Decentralized work platform where Creators, Nodes, and Admins thrive

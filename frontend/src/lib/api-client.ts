@@ -1,5 +1,5 @@
 /**
- * API Client for StarkRender Backend
+ * API Client for FluxFrame Backend
  * Handles all HTTP requests with authentication
  */
 

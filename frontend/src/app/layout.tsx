@@ -15,7 +15,7 @@ const josefinSans = Josefin_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "StarkRender",
+  title: "FluxFrame",
   description: "Decentralized work platform powered by StarkNet",
 };
 

@@ -115,7 +115,7 @@ export function WalletConnectButton({
           <DialogHeader>
             <DialogTitle>Starknet Wallet Required</DialogTitle>
             <DialogDescription>
-              To use StarkRender, you need a Starknet wallet installed in your
+              To use FluxFrame, you need a Starknet wallet installed in your
               browser.
             </DialogDescription>
           </DialogHeader>

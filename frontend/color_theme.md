@@ -1,4 +1,4 @@
-# StarkRender Color Palette
+# FluxFrame Color Palette
 
 ## Primary Colors
 

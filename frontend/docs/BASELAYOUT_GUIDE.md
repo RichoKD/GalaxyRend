@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `BaseLayout` component provides a reusable layout structure for all dashboard pages in StarkRender. It includes:
+The `BaseLayout` component provides a reusable layout structure for all dashboard pages in FluxFrame. It includes:
 
 - Background image from HeroSection
 - Cosmic gradient overlays

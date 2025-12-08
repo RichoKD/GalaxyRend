@@ -1,6 +1,6 @@
 # Authentication Implementation Guide
 
-This document explains the authentication workflow implemented in the StarkRender frontend.
+This document explains the authentication workflow implemented in the FluxFrame frontend.
 
 ## Overview
 

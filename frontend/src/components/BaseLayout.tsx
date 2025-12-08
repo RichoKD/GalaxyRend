@@ -97,7 +97,7 @@ export default function BaseLayout({
               <Link href="/" className="flex items-center gap-2 group shrink-0">
                 <Image
                   src="/logo.png"
-                  alt="StarkRender Logo"
+                  alt="FluxFrame Logo"
                   width={140}
                   height={50}
                   className="h-8 sm:h-10 w-auto transition-all duration-300 group-hover:scale-105"
@@ -168,7 +168,7 @@ export default function BaseLayout({
       )}
 
       {/* Spacer for fixed header */}
-      <div className="h-16" />
+      <div className="h-30" />
 
       {/* Main Content */}
       <main className="relative z-10 flex-1">{children}</main>

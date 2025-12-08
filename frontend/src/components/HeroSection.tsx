@@ -7,8 +7,8 @@ import Image from "next/image";
 import { WalletConnectButton } from "@/components/WalletConnectButton";
 
 const menuItems = [
-  { name: "For Creators", href: "#" },
-  { name: "For Nodes", href: "#" },
+  { name: "For Creators", href: "/dashboard/creators" },
+  { name: "For Nodes", href: "/dashboard/nodes" },
   { name: "About", href: "#about" },
 ];
 
@@ -31,7 +31,7 @@ export default function HeroSection() {
                 >
                   <Image
                     src="/logo.png"
-                    alt="StarkRender Logo"
+                    alt="FluxFrame Logo"
                     width={160}
                     height={60}
                     priority
