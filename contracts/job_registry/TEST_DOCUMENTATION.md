@@ -1,7 +1,7 @@
 # Job Registry Test Documentation
 
 ## Overview
-This document describes the comprehensive test suite for the FluxFrame Job Registry smart contract written in Cairo for Starknet.
+This document describes the comprehensive test suite for the GalaxyRend Job Registry smart contract written in Cairo for Starknet.
 
 ## Current Test Coverage
 

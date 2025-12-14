@@ -1,4 +1,4 @@
-use fluxframe_job_registry::job_registry::{IJobRegistryDispatcher, IJobRegistryDispatcherTrait};
+use galaxyrend_job_registry::job_registry::{IJobRegistryDispatcher, IJobRegistryDispatcherTrait};
 use openzeppelin_token::erc20::interface::{IERC20, IERC20Dispatcher, IERC20DispatcherTrait};
 use snforge_std::{
     ContractClassTrait, DeclareResultTrait, declare, start_cheat_block_timestamp,
@@ -107,7 +107,9 @@ fn deploy_job_registry(owner: ContractAddress, token_address: ContractAddress) -
 
 #[cfg(test)]
 mod tests {
-    use fluxframe_job_registry::job_registry::{IJobRegistryDispatcher, IJobRegistryDispatcherTrait};
+    use galaxyrend_job_registry::job_registry::{
+        IJobRegistryDispatcher, IJobRegistryDispatcherTrait,
+    };
     use super::*;
 
     #[test]

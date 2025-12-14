@@ -1,6 +1,6 @@
-# FluxFrame Backend
+# GalaxyRend Backend
 
-FastAPI backend service for the FluxFrame decentralized computing platform.
+FastAPI backend service for the GalaxyRend decentralized computing platform.
 
 ## Features
 
@@ -59,10 +59,10 @@ backend/
 
 3. **Update configuration in `.env`:**
    ```env
-   DATABASE_URL=postgresql+asyncpg://user:password@localhost/fluxframe_db
+   DATABASE_URL=postgresql+asyncpg://user:password@localhost/galaxyrend_db
    STARKNET_RPC_URL=http://localhost:5050
    CONTRACT_ADDRESS=0x...  # Your deployed contract address
-   CONTRACT_ABI_PATH=../contracts/job_registry/target/dev/fluxframe_job_registry.contract_class.json
+   CONTRACT_ABI_PATH=../contracts/job_registry/target/dev/galaxyrend_job_registry.contract_class.json
    ```
 
 4. **Start the backend:**
@@ -164,7 +164,7 @@ Key configuration options in `.env`:
 
 ```env
 # Database
-DATABASE_URL=postgresql+asyncpg://user:password@localhost/fluxframe_db
+DATABASE_URL=postgresql+asyncpg://user:password@localhost/galaxyrend_db
 
 # StarkNet
 STARKNET_RPC_URL=http://localhost:5050
@@ -248,9 +248,9 @@ Monitor these endpoints for:
 - Event indexer status
 - StarkNet node connectivity
 
-## Integration with FluxFrame
+## Integration with GalaxyRend
 
-The backend integrates with other FluxFrame components:
+The backend integrates with other GalaxyRend components:
 
 1. **Smart Contracts**: Reads worker and job data from deployed contracts
 2. **Worker Nodes**: Provides APIs for worker registration and job polling

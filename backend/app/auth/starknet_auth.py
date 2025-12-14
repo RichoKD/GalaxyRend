@@ -29,7 +29,7 @@ class StarkNetAuthenticator:
         
         # Human-readable message for display
         display_message = (
-            f"FluxFrame Authentication\n"
+            f"GalaxyRend Authentication\n"
             f"Address: {address}\n"
             f"Timestamp: {timestamp}\n"
             f"Nonce: {nonce}\n"

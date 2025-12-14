@@ -7,7 +7,7 @@ from app.auth.starknet_auth import starknet_authenticator
 
 async def test_authentication_flow():
     """Test the authentication flow components."""
-    print("Testing FluxFrame Authentication Implementation")
+    print("Testing GalaxyRend Authentication Implementation")
     print("=" * 50)
     
     # Test 1: JWT Token Creation and Verification

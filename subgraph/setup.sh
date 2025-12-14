@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# The Graph Subgraph Setup Script for FluxFrame
+# The Graph Subgraph Setup Script for GalaxyRend
 
 set -e
 
-echo "📊 Setting up The Graph subgraph for FluxFrame..."
+echo "📊 Setting up The Graph subgraph for GalaxyRend..."
 
 # Get the directory of the script
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -32,7 +32,7 @@ echo "📦 Installing dependencies..."
 npm install
 
 # Check if contract ABI exists
-CONTRACT_ABI_PATH="../contracts/job_registry/target/dev/fluxframe_job_registry.contract_class.json"
+CONTRACT_ABI_PATH="../contracts/job_registry/target/dev/galaxyrend_job_registry.contract_class.json"
 if [ ! -f "$CONTRACT_ABI_PATH" ]; then
     echo "❌ Contract ABI not found at $CONTRACT_ABI_PATH"
     echo "Please compile your contract first by running:"
@@ -100,4 +100,4 @@ if ! command -v graph &> /dev/null; then
     echo "   npm install -g @graphprotocol/graph-cli"
 fi
 
-echo "🎉 The Graph subgraph is ready for FluxFrame!"
+echo "🎉 The Graph subgraph is ready for GalaxyRend!"

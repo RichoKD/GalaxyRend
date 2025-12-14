@@ -2,7 +2,7 @@
 
 ## Overview
 
-BaseLayout is a reusable component that provides consistent background, header, and footer across all dashboard pages in FluxFrame.
+BaseLayout is a reusable component that provides consistent background, header, and footer across all dashboard pages in GalaxyRend.
 
 ## Component Location
 

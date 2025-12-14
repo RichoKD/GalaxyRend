@@ -11,7 +11,7 @@ services:
     volumes:
       - ipfs_data:/data/ipfs
     networks:
-      - flux-frame-net
+      - galaxyrend-net
     environment:
       - IPFS_API_ORIGINS=http://localhost:3000
 
@@ -19,7 +19,7 @@ services:
     build:
       context: ../backend
       dockerfile: Dockerfile
-    container_name: flux-frame-backend
+    container_name: galaxyrend-backend
     env_file:
       - ../backend/.env
     ports:
@@ -28,26 +28,26 @@ services:
       - db
       - ipfs-node
     networks:
-      - flux-frame-net
+      - galaxyrend-net
     volumes:
       - ../backend:/app
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-# database docker run -d --name fluxframe_db -p 5432:5432 -e POSTGRES_PASSWORD=1234567 postgres:17
+# database docker run -d --name galaxyrend_db -p 5432:5432 -e POSTGRES_PASSWORD=1234567 postgres:17
   db:
     image: postgres:17
-    container_name: fluxframe_db
+    container_name: galaxyrend_db
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=1234567
-      - POSTGRES_DB=fluxframe_db
+      - POSTGRES_DB=galaxyrend_db
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     networks:
-      - flux-frame-net
+      - galaxyrend-net
 
   # starknet-devnet:
   #   image: shardlabs/starknet-devnet-rs:latest-seed0
@@ -56,21 +56,21 @@ services:
   #     - "5050:5050"
   #   command: ["--gas-price", "1"]
   #   networks:
-  #     - flux-frame-net
+  #     - galaxyrend-net
 
 
   worker:
     build:
       context: ../worker
       dockerfile: Dockerfile
-    container_name: flux-frame-worker
+    container_name: galaxyrend-worker
     env_file:
       - ./worker.env
     depends_on:
       - backend
       - ipfs-node
     networks:
-      - flux-frame-net
+      - galaxyrend-net
     volumes:
       - ../worker:/app
 
@@ -80,5 +80,5 @@ volumes:
   
 
 networks:
-  flux-frame-net:
+  galaxyrend-net:
     driver: bridge

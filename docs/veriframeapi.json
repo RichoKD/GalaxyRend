@@ -1,1 +1,3385 @@
-{"openapi":"3.1.0","info":{"title":"FluxFrame Backend API","description":"Backend service for FluxFrame decentralized computing platform","version":"1.0.0"},"paths":{"/api/v1/auth/challenge":{"post":{"tags":["authentication"],"summary":"Get Auth Challenge","description":"Generate authentication challenge for wallet signing.","operationId":"get_auth_challenge_api_v1_auth_challenge_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/ChallengeRequest"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ChallengeResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/auth/authenticate":{"post":{"tags":["authentication"],"summary":"Authenticate Worker","description":"Authenticate worker with signed challenge.","operationId":"authenticate_worker_api_v1_auth_authenticate_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/AuthRequest"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/AuthResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/auth/refresh":{"post":{"tags":["authentication"],"summary":"Refresh Token","description":"Refresh access token using refresh token.","operationId":"refresh_token_api_v1_auth_refresh_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/RefreshRequest"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/RefreshResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/auth/verify-token":{"post":{"tags":["authentication"],"summary":"Verify Token","description":"Verify token validity.","operationId":"verify_token_api_v1_auth_verify_token_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/VerifyTokenRequest"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/VerifyTokenResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/auth/logout":{"post":{"tags":["authentication"],"summary":"Logout","description":"Logout worker (invalidate tokens).","operationId":"logout_api_v1_auth_logout_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/LogoutRequest"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}},"security":[{"HTTPBearer":[]}]}},"/api/v1/auth/me":{"get":{"tags":["authentication"],"summary":"Get Current User","description":"Get current authenticated worker information.","operationId":"get_current_user_api_v1_auth_me_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/WorkerResponse"}}}}},"security":[{"HTTPBearer":[]}]}},"/api/v1/auth/cleanup-challenges":{"post":{"tags":["authentication"],"summary":"Cleanup Expired Challenges","description":"Cleanup expired authentication challenges (admin endpoint).","operationId":"cleanup_expired_challenges_api_v1_auth_cleanup_challenges_post","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}},"/api/v1/workers/":{"get":{"tags":["workers"],"summary":"Get Workers","description":"Get list of workers with optional filtering","operationId":"get_workers_api_v1_workers__get","parameters":[{"name":"skip","in":"query","required":false,"schema":{"type":"integer","minimum":0,"description":"Number of workers to skip","default":0,"title":"Skip"},"description":"Number of workers to skip"},{"name":"limit","in":"query","required":false,"schema":{"type":"integer","maximum":1000,"minimum":1,"description":"Number of workers to return","default":100,"title":"Limit"},"description":"Number of workers to return"},{"name":"verified_only","in":"query","required":false,"schema":{"type":"boolean","description":"Return only verified workers","default":false,"title":"Verified Only"},"description":"Return only verified workers"},{"name":"active_only","in":"query","required":false,"schema":{"type":"boolean","description":"Return only active workers","default":true,"title":"Active Only"},"description":"Return only active workers"},{"name":"min_reputation","in":"query","required":false,"schema":{"anyOf":[{"type":"integer","maximum":1000,"minimum":0},{"type":"null"}],"description":"Minimum reputation score","title":"Min Reputation"},"description":"Minimum reputation score"}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/WorkerResponse"},"title":"Response Get Workers Api V1 Workers  Get"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/workers/{worker_address}":{"get":{"tags":["workers"],"summary":"Get Worker","description":"Get worker by address","operationId":"get_worker_api_v1_workers__worker_address__get","parameters":[{"name":"worker_address","in":"path","required":true,"schema":{"type":"string","title":"Worker Address"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/WorkerResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}},"put":{"tags":["workers"],"summary":"Update Worker","description":"Update worker information (only own profile or admin)","operationId":"update_worker_api_v1_workers__worker_address__put","security":[{"HTTPBearer":[]}],"parameters":[{"name":"worker_address","in":"path","required":true,"schema":{"type":"string","title":"Worker Address"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/WorkerUpdate"}}}},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/WorkerResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/workers/register":{"post":{"tags":["workers"],"summary":"Register Worker","description":"Register a new worker (mirrors on-chain registration)","operationId":"register_worker_api_v1_workers_register_post","requestBody":{"content":{"application/json":{"schema":{"$ref":"#/components/schemas/WorkerRegistration"}}},"required":true},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/WorkerResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/workers/{worker_address}/verify":{"post":{"tags":["workers"],"summary":"Verify Worker","description":"Verify a worker (admin only)","operationId":"verify_worker_api_v1_workers__worker_address__verify_post","security":[{"HTTPBearer":[]}],"parameters":[{"name":"worker_address","in":"path","required":true,"schema":{"type":"string","title":"Worker Address"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/workers/{worker_address}/reputation-history":{"get":{"tags":["workers"],"summary":"Get Worker Reputation History","description":"Get worker's reputation history","operationId":"get_worker_reputation_history_api_v1_workers__worker_address__reputation_history_get","parameters":[{"name":"worker_address","in":"path","required":true,"schema":{"type":"string","title":"Worker Address"}},{"name":"skip","in":"query","required":false,"schema":{"type":"integer","minimum":0,"default":0,"title":"Skip"}},{"name":"limit","in":"query","required":false,"schema":{"type":"integer","maximum":200,"minimum":1,"default":50,"title":"Limit"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/ReputationHistoryResponse"},"title":"Response Get Worker Reputation History Api V1 Workers  Worker Address  Reputation History Get"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/workers/{worker_address}/jobs":{"get":{"tags":["workers"],"summary":"Get Worker Jobs","description":"Get jobs assigned to a worker","operationId":"get_worker_jobs_api_v1_workers__worker_address__jobs_get","parameters":[{"name":"worker_address","in":"path","required":true,"schema":{"type":"string","title":"Worker Address"}},{"name":"status","in":"query","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"description":"Filter by job status","title":"Status"},"description":"Filter by job status"},{"name":"skip","in":"query","required":false,"schema":{"type":"integer","minimum":0,"default":0,"title":"Skip"}},{"name":"limit","in":"query","required":false,"schema":{"type":"integer","maximum":200,"minimum":1,"default":50,"title":"Limit"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"array","items":{"type":"object"},"title":"Response Get Worker Jobs Api V1 Workers  Worker Address  Jobs Get"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/workers/stats/overview":{"get":{"tags":["workers"],"summary":"Get Workers Stats","description":"Get overall worker statistics","operationId":"get_workers_stats_api_v1_workers_stats_overview_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}},"/api/v1/jobs/":{"get":{"tags":["jobs"],"summary":"Get Jobs","description":"Get list of jobs with optional filtering","operationId":"get_jobs_api_v1_jobs__get","parameters":[{"name":"skip","in":"query","required":false,"schema":{"type":"integer","minimum":0,"description":"Number of jobs to skip","default":0,"title":"Skip"},"description":"Number of jobs to skip"},{"name":"limit","in":"query","required":false,"schema":{"type":"integer","maximum":1000,"minimum":1,"description":"Number of jobs to return","default":100,"title":"Limit"},"description":"Number of jobs to return"},{"name":"status","in":"query","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"description":"Filter by job status","title":"Status"},"description":"Filter by job status"},{"name":"creator_address","in":"query","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"description":"Filter by creator address","title":"Creator Address"},"description":"Filter by creator address"},{"name":"worker_address","in":"query","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"description":"Filter by assigned worker","title":"Worker Address"},"description":"Filter by assigned worker"},{"name":"min_reward","in":"query","required":false,"schema":{"anyOf":[{"type":"integer","minimum":0},{"type":"null"}],"description":"Minimum reward amount","title":"Min Reward"},"description":"Minimum reward amount"},{"name":"min_reputation_required","in":"query","required":false,"schema":{"anyOf":[{"type":"integer","maximum":1000,"minimum":0},{"type":"null"}],"description":"Minimum reputation required","title":"Min Reputation Required"},"description":"Minimum reputation required"}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/JobResponse"},"title":"Response Get Jobs Api V1 Jobs  Get"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}},"post":{"tags":["jobs"],"summary":"Create Job","description":"Create a new job (mirrors on-chain job creation)","operationId":"create_job_api_v1_jobs__post","requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/JobCreate"}}}},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/JobResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/jobs/available":{"get":{"tags":["jobs"],"summary":"Get Available Jobs","description":"Get available jobs (open status, not yet assigned)","operationId":"get_available_jobs_api_v1_jobs_available_get","parameters":[{"name":"worker_address","in":"query","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"description":"Check eligibility for specific worker","title":"Worker Address"},"description":"Check eligibility for specific worker"},{"name":"skip","in":"query","required":false,"schema":{"type":"integer","minimum":0,"default":0,"title":"Skip"}},{"name":"limit","in":"query","required":false,"schema":{"type":"integer","maximum":200,"minimum":1,"default":50,"title":"Limit"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/JobResponse"},"title":"Response Get Available Jobs Api V1 Jobs Available Get"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/jobs/{job_id}":{"get":{"tags":["jobs"],"summary":"Get Job","description":"Get job by ID (UUID or chain job ID)","operationId":"get_job_api_v1_jobs__job_id__get","parameters":[{"name":"job_id","in":"path","required":true,"schema":{"type":"string","title":"Job Id"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/JobResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/jobs/{job_id}/assign":{"post":{"tags":["jobs"],"summary":"Assign Job","description":"Assign job to a worker","operationId":"assign_job_api_v1_jobs__job_id__assign_post","parameters":[{"name":"job_id","in":"path","required":true,"schema":{"type":"string","title":"Job Id"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/JobAssignment"}}}},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/JobResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/jobs/{job_id}/complete":{"post":{"tags":["jobs"],"summary":"Complete Job","description":"Mark job as completed with results","operationId":"complete_job_api_v1_jobs__job_id__complete_post","parameters":[{"name":"job_id","in":"path","required":true,"schema":{"type":"string","title":"Job Id"}}],"requestBody":{"required":true,"content":{"application/json":{"schema":{"$ref":"#/components/schemas/JobCompletion"}}}},"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/JobResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/jobs/{job_id}/events":{"get":{"tags":["jobs"],"summary":"Get Job Events","description":"Get events for a specific job","operationId":"get_job_events_api_v1_jobs__job_id__events_get","parameters":[{"name":"job_id","in":"path","required":true,"schema":{"type":"string","title":"Job Id"}},{"name":"skip","in":"query","required":false,"schema":{"type":"integer","minimum":0,"default":0,"title":"Skip"}},{"name":"limit","in":"query","required":false,"schema":{"type":"integer","maximum":200,"minimum":1,"default":50,"title":"Limit"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/JobEventResponse"},"title":"Response Get Job Events Api V1 Jobs  Job Id  Events Get"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/jobs/stats/overview":{"get":{"tags":["jobs"],"summary":"Get Jobs Stats","description":"Get overall job statistics","operationId":"get_jobs_stats_api_v1_jobs_stats_overview_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}},"/api/v1/events/":{"get":{"tags":["events"],"summary":"Get Contract Events","description":"Get contract events with optional filtering","operationId":"get_contract_events_api_v1_events__get","parameters":[{"name":"skip","in":"query","required":false,"schema":{"type":"integer","minimum":0,"description":"Number of events to skip","default":0,"title":"Skip"},"description":"Number of events to skip"},{"name":"limit","in":"query","required":false,"schema":{"type":"integer","maximum":1000,"minimum":1,"description":"Number of events to return","default":100,"title":"Limit"},"description":"Number of events to return"},{"name":"event_name","in":"query","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"description":"Filter by event name","title":"Event Name"},"description":"Filter by event name"},{"name":"contract_address","in":"query","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"description":"Filter by contract address","title":"Contract Address"},"description":"Filter by contract address"},{"name":"processed","in":"query","required":false,"schema":{"anyOf":[{"type":"boolean"},{"type":"null"}],"description":"Filter by processed status","title":"Processed"},"description":"Filter by processed status"},{"name":"from_block","in":"query","required":false,"schema":{"anyOf":[{"type":"integer"},{"type":"null"}],"description":"Filter events from block number","title":"From Block"},"description":"Filter events from block number"},{"name":"to_block","in":"query","required":false,"schema":{"anyOf":[{"type":"integer"},{"type":"null"}],"description":"Filter events to block number","title":"To Block"},"description":"Filter events to block number"}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/ContractEventResponse"},"title":"Response Get Contract Events Api V1 Events  Get"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/events/unprocessed":{"get":{"tags":["events"],"summary":"Get Unprocessed Events","description":"Get unprocessed contract events","operationId":"get_unprocessed_events_api_v1_events_unprocessed_get","parameters":[{"name":"skip","in":"query","required":false,"schema":{"type":"integer","minimum":0,"default":0,"title":"Skip"}},{"name":"limit","in":"query","required":false,"schema":{"type":"integer","maximum":200,"minimum":1,"default":50,"title":"Limit"}},{"name":"event_name","in":"query","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"description":"Filter by event name","title":"Event Name"},"description":"Filter by event name"}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"array","items":{"$ref":"#/components/schemas/ContractEventResponse"},"title":"Response Get Unprocessed Events Api V1 Events Unprocessed Get"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/events/{event_id}":{"get":{"tags":["events"],"summary":"Get Event","description":"Get specific contract event by ID","operationId":"get_event_api_v1_events__event_id__get","parameters":[{"name":"event_id","in":"path","required":true,"schema":{"type":"string","title":"Event Id"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/ContractEventResponse"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/events/{event_id}/mark-processed":{"post":{"tags":["events"],"summary":"Mark Event Processed","description":"Mark an event as processed","operationId":"mark_event_processed_api_v1_events__event_id__mark_processed_post","parameters":[{"name":"event_id","in":"path","required":true,"schema":{"type":"string","title":"Event Id"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/events/summary/stats":{"get":{"tags":["events"],"summary":"Get Event Summary","description":"Get event summary statistics","operationId":"get_event_summary_api_v1_events_summary_stats_get","parameters":[{"name":"hours","in":"query","required":false,"schema":{"type":"integer","maximum":168,"minimum":1,"description":"Number of hours to look back","default":24,"title":"Hours"},"description":"Number of hours to look back"}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"$ref":"#/components/schemas/EventSummary"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/events/blocks/{block_number}":{"get":{"tags":["events"],"summary":"Get Events By Block","description":"Get all events from a specific block","operationId":"get_events_by_block_api_v1_events_blocks__block_number__get","parameters":[{"name":"block_number","in":"path","required":true,"schema":{"type":"integer","title":"Block Number"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/events/transactions/{tx_hash}":{"get":{"tags":["events"],"summary":"Get Events By Transaction","description":"Get all events from a specific transaction","operationId":"get_events_by_transaction_api_v1_events_transactions__tx_hash__get","parameters":[{"name":"tx_hash","in":"path","required":true,"schema":{"type":"string","title":"Tx Hash"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/events/cleanup":{"delete":{"tags":["events"],"summary":"Cleanup Old Events","description":"Clean up old processed events","operationId":"cleanup_old_events_api_v1_events_cleanup_delete","parameters":[{"name":"days","in":"query","required":false,"schema":{"type":"integer","maximum":365,"minimum":1,"description":"Delete events older than this many days","default":30,"title":"Days"},"description":"Delete events older than this many days"},{"name":"dry_run","in":"query","required":false,"schema":{"type":"boolean","description":"If true, only count events to be deleted","default":true,"title":"Dry Run"},"description":"If true, only count events to be deleted"}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/hybrid/workers":{"get":{"tags":["hybrid-graph"],"summary":"Get Workers Hybrid","description":"Get workers using The Graph or database based on configuration","operationId":"get_workers_hybrid_api_v1_hybrid_workers_get","parameters":[{"name":"skip","in":"query","required":false,"schema":{"type":"integer","minimum":0,"default":0,"title":"Skip"}},{"name":"limit","in":"query","required":false,"schema":{"type":"integer","maximum":1000,"minimum":1,"default":100,"title":"Limit"}},{"name":"verified_only","in":"query","required":false,"schema":{"type":"boolean","default":false,"title":"Verified Only"}},{"name":"min_reputation","in":"query","required":false,"schema":{"anyOf":[{"type":"integer","maximum":1000,"minimum":0},{"type":"null"}],"title":"Min Reputation"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"array","items":{"type":"object"},"title":"Response Get Workers Hybrid Api V1 Hybrid Workers Get"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/hybrid/jobs":{"get":{"tags":["hybrid-graph"],"summary":"Get Jobs Hybrid","description":"Get jobs using The Graph or database based on configuration","operationId":"get_jobs_hybrid_api_v1_hybrid_jobs_get","parameters":[{"name":"skip","in":"query","required":false,"schema":{"type":"integer","minimum":0,"default":0,"title":"Skip"}},{"name":"limit","in":"query","required":false,"schema":{"type":"integer","maximum":1000,"minimum":1,"default":100,"title":"Limit"}},{"name":"status","in":"query","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Status"}},{"name":"creator_address","in":"query","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Creator Address"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{"type":"array","items":{"type":"object"},"title":"Response Get Jobs Hybrid Api V1 Hybrid Jobs Get"}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/hybrid/worker/{worker_address}":{"get":{"tags":["hybrid-graph"],"summary":"Get Worker Hybrid","description":"Get worker details using The Graph or database","operationId":"get_worker_hybrid_api_v1_hybrid_worker__worker_address__get","parameters":[{"name":"worker_address","in":"path","required":true,"schema":{"type":"string","title":"Worker Address"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/hybrid/available-jobs":{"get":{"tags":["hybrid-graph"],"summary":"Get Available Jobs Hybrid","description":"Get available jobs using The Graph or database","operationId":"get_available_jobs_hybrid_api_v1_hybrid_available_jobs_get","parameters":[{"name":"worker_address","in":"query","required":false,"schema":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Worker Address"}},{"name":"skip","in":"query","required":false,"schema":{"type":"integer","minimum":0,"default":0,"title":"Skip"}},{"name":"limit","in":"query","required":false,"schema":{"type":"integer","maximum":200,"minimum":1,"default":50,"title":"Limit"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/api/v1/hybrid/stats/global":{"get":{"tags":["hybrid-graph"],"summary":"Get Global Stats Hybrid","description":"Get global statistics using The Graph or database","operationId":"get_global_stats_hybrid_api_v1_hybrid_stats_global_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}},"/api/v1/hybrid/stats/daily":{"get":{"tags":["hybrid-graph"],"summary":"Get Daily Stats Hybrid","description":"Get daily statistics using The Graph","operationId":"get_daily_stats_hybrid_api_v1_hybrid_stats_daily_get","parameters":[{"name":"days","in":"query","required":false,"schema":{"type":"integer","maximum":30,"minimum":1,"default":7,"title":"Days"}}],"responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}},"422":{"description":"Validation Error","content":{"application/json":{"schema":{"$ref":"#/components/schemas/HTTPValidationError"}}}}}}},"/":{"get":{"summary":"Root","description":"Health check endpoint","operationId":"root__get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}},"/health":{"get":{"summary":"Health Check","description":"Detailed health check","operationId":"health_check_health_get","responses":{"200":{"description":"Successful Response","content":{"application/json":{"schema":{}}}}}}}},"components":{"schemas":{"AuthRequest":{"properties":{"address":{"type":"string","title":"Address","description":"StarkNet address of the worker"},"message":{"type":"string","title":"Message","description":"Original challenge message"},"signature":{"items":{"type":"string"},"type":"array","title":"Signature","description":"Signature components"},"timestamp":{"type":"integer","title":"Timestamp","description":"Challenge timestamp"}},"type":"object","required":["address","message","signature","timestamp"],"title":"AuthRequest","description":"Request for authentication with signed challenge."},"AuthResponse":{"properties":{"access_token":{"type":"string","title":"Access Token","description":"JWT access token"},"refresh_token":{"type":"string","title":"Refresh Token","description":"JWT refresh token"},"token_type":{"type":"string","title":"Token Type","description":"Token type","default":"bearer"},"expires_in":{"type":"integer","title":"Expires In","description":"Token expiration time in seconds"},"worker":{"allOf":[{"$ref":"#/components/schemas/WorkerResponse"}],"description":"Authenticated worker information"}},"type":"object","required":["access_token","refresh_token","expires_in","worker"],"title":"AuthResponse","description":"Response after successful authentication."},"ChallengeRequest":{"properties":{"address":{"type":"string","title":"Address","description":"StarkNet address of the worker"}},"type":"object","required":["address"],"title":"ChallengeRequest","description":"Request for authentication challenge."},"ChallengeResponse":{"properties":{"message":{"type":"string","title":"Message","description":"Message to be signed"},"timestamp":{"type":"string","title":"Timestamp","description":"Challenge timestamp"},"nonce":{"type":"string","title":"Nonce","description":"Random nonce"},"expires_at":{"type":"string","title":"Expires At","description":"Challenge expiration timestamp"}},"type":"object","required":["message","timestamp","nonce","expires_at"],"title":"ChallengeResponse","description":"Response containing authentication challenge."},"ContractEventResponse":{"properties":{"id":{"type":"string","format":"uuid","title":"Id"},"transaction_hash":{"type":"string","title":"Transaction Hash"},"block_number":{"type":"integer","title":"Block Number"},"event_index":{"type":"integer","title":"Event Index"},"contract_address":{"type":"string","title":"Contract Address"},"event_name":{"type":"string","title":"Event Name"},"event_data":{"type":"string","title":"Event Data"},"processed":{"type":"boolean","title":"Processed","default":false},"processed_at":{"anyOf":[{"type":"string","format":"date-time"},{"type":"null"}],"title":"Processed At"},"timestamp":{"type":"string","format":"date-time","title":"Timestamp"}},"type":"object","required":["id","transaction_hash","block_number","event_index","contract_address","event_name","event_data","timestamp"],"title":"ContractEventResponse","description":"Schema for contract event responses"},"EventSummary":{"properties":{"total_events":{"type":"integer","title":"Total Events"},"events_by_type":{"additionalProperties":{"type":"integer"},"type":"object","title":"Events By Type"},"processed_events":{"type":"integer","title":"Processed Events"},"unprocessed_events":{"type":"integer","title":"Unprocessed Events"},"latest_block_processed":{"anyOf":[{"type":"integer"},{"type":"null"}],"title":"Latest Block Processed"},"timeframe_hours":{"type":"integer","title":"Timeframe Hours"}},"type":"object","required":["total_events","events_by_type","processed_events","unprocessed_events","timeframe_hours"],"title":"EventSummary","description":"Schema for event summary statistics"},"HTTPValidationError":{"properties":{"detail":{"items":{"$ref":"#/components/schemas/ValidationError"},"type":"array","title":"Detail"}},"type":"object","title":"HTTPValidationError"},"JobAssignment":{"properties":{"worker_address":{"type":"string","title":"Worker Address","description":"Address of the worker to assign"}},"type":"object","required":["worker_address"],"title":"JobAssignment","description":"Schema for assigning a job to a worker"},"JobCompletion":{"properties":{"result_cid_part1":{"type":"string","title":"Result Cid Part1","description":"First part of result IPFS CID"},"result_cid_part2":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Result Cid Part2","description":"Second part of result IPFS CID"},"quality_score":{"type":"integer","maximum":100.0,"minimum":0.0,"title":"Quality Score","description":"Quality score (0-100)"},"worker_address":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Worker Address","description":"Worker who completed the job"}},"type":"object","required":["result_cid_part1","quality_score"],"title":"JobCompletion","description":"Schema for completing a job"},"JobCreate":{"properties":{"chain_job_id":{"type":"integer","title":"Chain Job Id","description":"On-chain job ID"},"creator_address":{"type":"string","title":"Creator Address","description":"Address of job creator"},"asset_cid_part1":{"type":"string","title":"Asset Cid Part1","description":"First part of asset IPFS CID"},"asset_cid_part2":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Asset Cid Part2","description":"Second part of asset IPFS CID"},"reward_amount":{"type":"integer","title":"Reward Amount","description":"Reward amount in wei"},"deadline":{"type":"string","format":"date-time","title":"Deadline","description":"Job deadline"},"min_reputation":{"type":"integer","title":"Min Reputation","description":"Minimum worker reputation required","default":400},"required_capabilities":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Required Capabilities","description":"JSON string of required capabilities"}},"type":"object","required":["chain_job_id","creator_address","asset_cid_part1","reward_amount","deadline"],"title":"JobCreate","description":"Schema for creating a job"},"JobEventResponse":{"properties":{"id":{"type":"string","format":"uuid","title":"Id"},"job_id":{"type":"string","format":"uuid","title":"Job Id"},"event_type":{"type":"string","title":"Event Type"},"transaction_hash":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Transaction Hash"},"block_number":{"anyOf":[{"type":"integer"},{"type":"null"}],"title":"Block Number"},"timestamp":{"type":"string","format":"date-time","title":"Timestamp"},"actor_address":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Actor Address"},"event_data":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Event Data"}},"type":"object","required":["id","job_id","event_type","timestamp"],"title":"JobEventResponse","description":"Schema for job event responses"},"JobResponse":{"properties":{"chain_job_id":{"type":"integer","title":"Chain Job Id","description":"On-chain job ID"},"creator_address":{"type":"string","title":"Creator Address","description":"Address of job creator"},"asset_cid_part1":{"type":"string","title":"Asset Cid Part1","description":"First part of asset IPFS CID"},"asset_cid_part2":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Asset Cid Part2","description":"Second part of asset IPFS CID"},"reward_amount":{"type":"integer","title":"Reward Amount","description":"Reward amount in wei"},"deadline":{"type":"string","format":"date-time","title":"Deadline","description":"Job deadline"},"min_reputation":{"type":"integer","title":"Min Reputation","description":"Minimum worker reputation required","default":400},"required_capabilities":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Required Capabilities","description":"JSON string of required capabilities"},"id":{"type":"string","format":"uuid","title":"Id"},"full_asset_cid":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Full Asset Cid"},"created_at":{"type":"string","format":"date-time","title":"Created At"},"worker_id":{"anyOf":[{"type":"string","format":"uuid"},{"type":"null"}],"title":"Worker Id"},"assigned_at":{"anyOf":[{"type":"string","format":"date-time"},{"type":"null"}],"title":"Assigned At"},"completed_at":{"anyOf":[{"type":"string","format":"date-time"},{"type":"null"}],"title":"Completed At"},"result_cid_part1":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Result Cid Part1"},"result_cid_part2":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Result Cid Part2"},"full_result_cid":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Full Result Cid"},"quality_score":{"anyOf":[{"type":"integer"},{"type":"null"}],"title":"Quality Score"},"status":{"type":"string","title":"Status","default":"open"}},"type":"object","required":["chain_job_id","creator_address","asset_cid_part1","reward_amount","deadline","id","created_at"],"title":"JobResponse","description":"Schema for job API responses"},"LogoutRequest":{"properties":{"refresh_token":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Refresh Token","description":"Refresh token to invalidate"}},"type":"object","title":"LogoutRequest","description":"Request to logout (invalidate tokens)."},"RefreshRequest":{"properties":{"refresh_token":{"type":"string","title":"Refresh Token","description":"Valid refresh token"}},"type":"object","required":["refresh_token"],"title":"RefreshRequest","description":"Request to refresh access token."},"RefreshResponse":{"properties":{"access_token":{"type":"string","title":"Access Token","description":"New JWT access token"},"token_type":{"type":"string","title":"Token Type","description":"Token type","default":"bearer"},"expires_in":{"type":"integer","title":"Expires In","description":"Token expiration time in seconds"}},"type":"object","required":["access_token","expires_in"],"title":"RefreshResponse","description":"Response with new access token."},"ReputationHistoryResponse":{"properties":{"id":{"type":"string","format":"uuid","title":"Id"},"old_reputation":{"type":"integer","title":"Old Reputation"},"new_reputation":{"type":"integer","title":"New Reputation"},"change_amount":{"type":"integer","title":"Change Amount"},"reason":{"type":"string","title":"Reason"},"job_chain_id":{"anyOf":[{"type":"integer"},{"type":"null"}],"title":"Job Chain Id"},"quality_score":{"anyOf":[{"type":"integer"},{"type":"null"}],"title":"Quality Score"},"changed_by":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Changed By"},"transaction_hash":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Transaction Hash"},"timestamp":{"type":"string","format":"date-time","title":"Timestamp"}},"type":"object","required":["id","old_reputation","new_reputation","change_amount","reason","timestamp"],"title":"ReputationHistoryResponse","description":"Schema for reputation history entries"},"TokenPayload":{"properties":{"sub":{"type":"string","title":"Sub","description":"Subject (worker address)"},"role":{"type":"string","title":"Role","description":"User role","default":"worker"},"exp":{"type":"integer","title":"Exp","description":"Expiration timestamp"},"iat":{"type":"integer","title":"Iat","description":"Issued at timestamp"},"type":{"type":"string","title":"Type","description":"Token type (access/refresh)"}},"type":"object","required":["sub","exp","iat","type"],"title":"TokenPayload","description":"JWT token payload structure."},"ValidationError":{"properties":{"loc":{"items":{"anyOf":[{"type":"string"},{"type":"integer"}]},"type":"array","title":"Location"},"msg":{"type":"string","title":"Message"},"type":{"type":"string","title":"Error Type"}},"type":"object","required":["loc","msg","type"],"title":"ValidationError"},"VerifyTokenRequest":{"properties":{"token":{"type":"string","title":"Token","description":"Token to verify"}},"type":"object","required":["token"],"title":"VerifyTokenRequest","description":"Request to verify token validity."},"VerifyTokenResponse":{"properties":{"valid":{"type":"boolean","title":"Valid","description":"Whether token is valid"},"payload":{"anyOf":[{"$ref":"#/components/schemas/TokenPayload"},{"type":"null"}],"description":"Token payload if valid"},"error":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Error","description":"Error message if invalid"}},"type":"object","required":["valid"],"title":"VerifyTokenResponse","description":"Response with token verification result."},"WorkerRegistration":{"properties":{"address":{"type":"string","title":"Address","description":"StarkNet address of the worker"},"public_key":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Public Key","description":"Public key for verification"},"info_cid":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Info Cid","description":"IPFS CID for worker information"},"capabilities":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Capabilities","description":"JSON string of worker capabilities"},"hardware_specs":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Hardware Specs","description":"JSON string of hardware specifications"},"contact_info":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Contact Info","description":"Contact information"}},"type":"object","required":["address"],"title":"WorkerRegistration","description":"Schema for worker registration"},"WorkerResponse":{"properties":{"address":{"type":"string","title":"Address","description":"StarkNet address of the worker"},"public_key":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Public Key","description":"Public key for verification"},"info_cid":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Info Cid","description":"IPFS CID for worker information"},"capabilities":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Capabilities","description":"JSON string of worker capabilities"},"hardware_specs":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Hardware Specs","description":"JSON string of hardware specifications"},"contact_info":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Contact Info","description":"Contact information"},"id":{"type":"string","format":"uuid","title":"Id"},"registered_at":{"type":"string","format":"date-time","title":"Registered At"},"verified":{"type":"boolean","title":"Verified","default":false},"verified_at":{"anyOf":[{"type":"string","format":"date-time"},{"type":"null"}],"title":"Verified At"},"verified_by":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Verified By"},"reputation":{"type":"integer","title":"Reputation","default":500},"jobs_completed":{"type":"integer","title":"Jobs Completed","default":0},"jobs_failed":{"type":"integer","title":"Jobs Failed","default":0},"total_earnings":{"type":"integer","title":"Total Earnings","default":0},"active":{"type":"boolean","title":"Active","default":true},"is_admin":{"type":"boolean","title":"Is Admin","default":false},"last_seen":{"anyOf":[{"type":"string","format":"date-time"},{"type":"null"}],"title":"Last Seen"}},"type":"object","required":["address","id","registered_at"],"title":"WorkerResponse","description":"Schema for worker API responses"},"WorkerUpdate":{"properties":{"public_key":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Public Key"},"info_cid":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Info Cid"},"capabilities":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Capabilities"},"hardware_specs":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Hardware Specs"},"contact_info":{"anyOf":[{"type":"string"},{"type":"null"}],"title":"Contact Info"},"active":{"anyOf":[{"type":"boolean"},{"type":"null"}],"title":"Active"}},"type":"object","title":"WorkerUpdate","description":"Schema for updating worker information"}},"securitySchemes":{"HTTPBearer":{"type":"http","scheme":"bearer"}}}}
+{
+    "openapi": "3.1.0",
+    "info": {
+        "title": "GalaxyRend Backend API",
+        "description": "Backend service for GalaxyRend decentralized computing platform",
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/auth/challenge": {
+            "post": {
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Get Auth Challenge",
+                "description": "Generate authentication challenge for wallet signing.",
+                "operationId": "get_auth_challenge_api_v1_auth_challenge_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/ChallengeRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ChallengeResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/authenticate": {
+            "post": {
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Authenticate Worker",
+                "description": "Authenticate worker with signed challenge.",
+                "operationId": "authenticate_worker_api_v1_auth_authenticate_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AuthRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AuthResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/refresh": {
+            "post": {
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Refresh Token",
+                "description": "Refresh access token using refresh token.",
+                "operationId": "refresh_token_api_v1_auth_refresh_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RefreshRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RefreshResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/verify-token": {
+            "post": {
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Verify Token",
+                "description": "Verify token validity.",
+                "operationId": "verify_token_api_v1_auth_verify_token_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/VerifyTokenRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/VerifyTokenResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/auth/logout": {
+            "post": {
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Logout",
+                "description": "Logout worker (invalidate tokens).",
+                "operationId": "logout_api_v1_auth_logout_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/LogoutRequest"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/auth/me": {
+            "get": {
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Get Current User",
+                "description": "Get current authenticated worker information.",
+                "operationId": "get_current_user_api_v1_auth_me_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/WorkerResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/auth/cleanup-challenges": {
+            "post": {
+                "tags": [
+                    "authentication"
+                ],
+                "summary": "Cleanup Expired Challenges",
+                "description": "Cleanup expired authentication challenges (admin endpoint).",
+                "operationId": "cleanup_expired_challenges_api_v1_auth_cleanup_challenges_post",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/workers/": {
+            "get": {
+                "tags": [
+                    "workers"
+                ],
+                "summary": "Get Workers",
+                "description": "Get list of workers with optional filtering",
+                "operationId": "get_workers_api_v1_workers__get",
+                "parameters": [
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "description": "Number of workers to skip",
+                            "default": 0,
+                            "title": "Skip"
+                        },
+                        "description": "Number of workers to skip"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 1000,
+                            "minimum": 1,
+                            "description": "Number of workers to return",
+                            "default": 100,
+                            "title": "Limit"
+                        },
+                        "description": "Number of workers to return"
+                    },
+                    {
+                        "name": "verified_only",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "description": "Return only verified workers",
+                            "default": false,
+                            "title": "Verified Only"
+                        },
+                        "description": "Return only verified workers"
+                    },
+                    {
+                        "name": "active_only",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "description": "Return only active workers",
+                            "default": true,
+                            "title": "Active Only"
+                        },
+                        "description": "Return only active workers"
+                    },
+                    {
+                        "name": "min_reputation",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "integer",
+                                    "maximum": 1000,
+                                    "minimum": 0
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Minimum reputation score",
+                            "title": "Min Reputation"
+                        },
+                        "description": "Minimum reputation score"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/WorkerResponse"
+                                    },
+                                    "title": "Response Get Workers Api V1 Workers  Get"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/workers/{worker_address}": {
+            "get": {
+                "tags": [
+                    "workers"
+                ],
+                "summary": "Get Worker",
+                "description": "Get worker by address",
+                "operationId": "get_worker_api_v1_workers__worker_address__get",
+                "parameters": [
+                    {
+                        "name": "worker_address",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Worker Address"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/WorkerResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "workers"
+                ],
+                "summary": "Update Worker",
+                "description": "Update worker information (only own profile or admin)",
+                "operationId": "update_worker_api_v1_workers__worker_address__put",
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "worker_address",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Worker Address"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/WorkerUpdate"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/WorkerResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/workers/register": {
+            "post": {
+                "tags": [
+                    "workers"
+                ],
+                "summary": "Register Worker",
+                "description": "Register a new worker (mirrors on-chain registration)",
+                "operationId": "register_worker_api_v1_workers_register_post",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/WorkerRegistration"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/WorkerResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/workers/{worker_address}/verify": {
+            "post": {
+                "tags": [
+                    "workers"
+                ],
+                "summary": "Verify Worker",
+                "description": "Verify a worker (admin only)",
+                "operationId": "verify_worker_api_v1_workers__worker_address__verify_post",
+                "security": [
+                    {
+                        "HTTPBearer": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "name": "worker_address",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Worker Address"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/workers/{worker_address}/reputation-history": {
+            "get": {
+                "tags": [
+                    "workers"
+                ],
+                "summary": "Get Worker Reputation History",
+                "description": "Get worker's reputation history",
+                "operationId": "get_worker_reputation_history_api_v1_workers__worker_address__reputation_history_get",
+                "parameters": [
+                    {
+                        "name": "worker_address",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Worker Address"
+                        }
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "default": 0,
+                            "title": "Skip"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 200,
+                            "minimum": 1,
+                            "default": 50,
+                            "title": "Limit"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ReputationHistoryResponse"
+                                    },
+                                    "title": "Response Get Worker Reputation History Api V1 Workers  Worker Address  Reputation History Get"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/workers/{worker_address}/jobs": {
+            "get": {
+                "tags": [
+                    "workers"
+                ],
+                "summary": "Get Worker Jobs",
+                "description": "Get jobs assigned to a worker",
+                "operationId": "get_worker_jobs_api_v1_workers__worker_address__jobs_get",
+                "parameters": [
+                    {
+                        "name": "worker_address",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Worker Address"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Filter by job status",
+                            "title": "Status"
+                        },
+                        "description": "Filter by job status"
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "default": 0,
+                            "title": "Skip"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 200,
+                            "minimum": 1,
+                            "default": 50,
+                            "title": "Limit"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    },
+                                    "title": "Response Get Worker Jobs Api V1 Workers  Worker Address  Jobs Get"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/workers/stats/overview": {
+            "get": {
+                "tags": [
+                    "workers"
+                ],
+                "summary": "Get Workers Stats",
+                "description": "Get overall worker statistics",
+                "operationId": "get_workers_stats_api_v1_workers_stats_overview_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/jobs/": {
+            "get": {
+                "tags": [
+                    "jobs"
+                ],
+                "summary": "Get Jobs",
+                "description": "Get list of jobs with optional filtering",
+                "operationId": "get_jobs_api_v1_jobs__get",
+                "parameters": [
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "description": "Number of jobs to skip",
+                            "default": 0,
+                            "title": "Skip"
+                        },
+                        "description": "Number of jobs to skip"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 1000,
+                            "minimum": 1,
+                            "description": "Number of jobs to return",
+                            "default": 100,
+                            "title": "Limit"
+                        },
+                        "description": "Number of jobs to return"
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Filter by job status",
+                            "title": "Status"
+                        },
+                        "description": "Filter by job status"
+                    },
+                    {
+                        "name": "creator_address",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Filter by creator address",
+                            "title": "Creator Address"
+                        },
+                        "description": "Filter by creator address"
+                    },
+                    {
+                        "name": "worker_address",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Filter by assigned worker",
+                            "title": "Worker Address"
+                        },
+                        "description": "Filter by assigned worker"
+                    },
+                    {
+                        "name": "min_reward",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "integer",
+                                    "minimum": 0
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Minimum reward amount",
+                            "title": "Min Reward"
+                        },
+                        "description": "Minimum reward amount"
+                    },
+                    {
+                        "name": "min_reputation_required",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "integer",
+                                    "maximum": 1000,
+                                    "minimum": 0
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Minimum reputation required",
+                            "title": "Min Reputation Required"
+                        },
+                        "description": "Minimum reputation required"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/JobResponse"
+                                    },
+                                    "title": "Response Get Jobs Api V1 Jobs  Get"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "jobs"
+                ],
+                "summary": "Create Job",
+                "description": "Create a new job (mirrors on-chain job creation)",
+                "operationId": "create_job_api_v1_jobs__post",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/JobCreate"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/JobResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/jobs/available": {
+            "get": {
+                "tags": [
+                    "jobs"
+                ],
+                "summary": "Get Available Jobs",
+                "description": "Get available jobs (open status, not yet assigned)",
+                "operationId": "get_available_jobs_api_v1_jobs_available_get",
+                "parameters": [
+                    {
+                        "name": "worker_address",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Check eligibility for specific worker",
+                            "title": "Worker Address"
+                        },
+                        "description": "Check eligibility for specific worker"
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "default": 0,
+                            "title": "Skip"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 200,
+                            "minimum": 1,
+                            "default": 50,
+                            "title": "Limit"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/JobResponse"
+                                    },
+                                    "title": "Response Get Available Jobs Api V1 Jobs Available Get"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/jobs/{job_id}": {
+            "get": {
+                "tags": [
+                    "jobs"
+                ],
+                "summary": "Get Job",
+                "description": "Get job by ID (UUID or chain job ID)",
+                "operationId": "get_job_api_v1_jobs__job_id__get",
+                "parameters": [
+                    {
+                        "name": "job_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Job Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/JobResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/jobs/{job_id}/assign": {
+            "post": {
+                "tags": [
+                    "jobs"
+                ],
+                "summary": "Assign Job",
+                "description": "Assign job to a worker",
+                "operationId": "assign_job_api_v1_jobs__job_id__assign_post",
+                "parameters": [
+                    {
+                        "name": "job_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Job Id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/JobAssignment"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/JobResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/jobs/{job_id}/complete": {
+            "post": {
+                "tags": [
+                    "jobs"
+                ],
+                "summary": "Complete Job",
+                "description": "Mark job as completed with results",
+                "operationId": "complete_job_api_v1_jobs__job_id__complete_post",
+                "parameters": [
+                    {
+                        "name": "job_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Job Id"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/JobCompletion"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/JobResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/jobs/{job_id}/events": {
+            "get": {
+                "tags": [
+                    "jobs"
+                ],
+                "summary": "Get Job Events",
+                "description": "Get events for a specific job",
+                "operationId": "get_job_events_api_v1_jobs__job_id__events_get",
+                "parameters": [
+                    {
+                        "name": "job_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Job Id"
+                        }
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "default": 0,
+                            "title": "Skip"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 200,
+                            "minimum": 1,
+                            "default": 50,
+                            "title": "Limit"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/JobEventResponse"
+                                    },
+                                    "title": "Response Get Job Events Api V1 Jobs  Job Id  Events Get"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/jobs/stats/overview": {
+            "get": {
+                "tags": [
+                    "jobs"
+                ],
+                "summary": "Get Jobs Stats",
+                "description": "Get overall job statistics",
+                "operationId": "get_jobs_stats_api_v1_jobs_stats_overview_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/events/": {
+            "get": {
+                "tags": [
+                    "events"
+                ],
+                "summary": "Get Contract Events",
+                "description": "Get contract events with optional filtering",
+                "operationId": "get_contract_events_api_v1_events__get",
+                "parameters": [
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "description": "Number of events to skip",
+                            "default": 0,
+                            "title": "Skip"
+                        },
+                        "description": "Number of events to skip"
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 1000,
+                            "minimum": 1,
+                            "description": "Number of events to return",
+                            "default": 100,
+                            "title": "Limit"
+                        },
+                        "description": "Number of events to return"
+                    },
+                    {
+                        "name": "event_name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Filter by event name",
+                            "title": "Event Name"
+                        },
+                        "description": "Filter by event name"
+                    },
+                    {
+                        "name": "contract_address",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Filter by contract address",
+                            "title": "Contract Address"
+                        },
+                        "description": "Filter by contract address"
+                    },
+                    {
+                        "name": "processed",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "boolean"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Filter by processed status",
+                            "title": "Processed"
+                        },
+                        "description": "Filter by processed status"
+                    },
+                    {
+                        "name": "from_block",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Filter events from block number",
+                            "title": "From Block"
+                        },
+                        "description": "Filter events from block number"
+                    },
+                    {
+                        "name": "to_block",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "integer"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Filter events to block number",
+                            "title": "To Block"
+                        },
+                        "description": "Filter events to block number"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ContractEventResponse"
+                                    },
+                                    "title": "Response Get Contract Events Api V1 Events  Get"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/events/unprocessed": {
+            "get": {
+                "tags": [
+                    "events"
+                ],
+                "summary": "Get Unprocessed Events",
+                "description": "Get unprocessed contract events",
+                "operationId": "get_unprocessed_events_api_v1_events_unprocessed_get",
+                "parameters": [
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "default": 0,
+                            "title": "Skip"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 200,
+                            "minimum": 1,
+                            "default": 50,
+                            "title": "Limit"
+                        }
+                    },
+                    {
+                        "name": "event_name",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "description": "Filter by event name",
+                            "title": "Event Name"
+                        },
+                        "description": "Filter by event name"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ContractEventResponse"
+                                    },
+                                    "title": "Response Get Unprocessed Events Api V1 Events Unprocessed Get"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/events/{event_id}": {
+            "get": {
+                "tags": [
+                    "events"
+                ],
+                "summary": "Get Event",
+                "description": "Get specific contract event by ID",
+                "operationId": "get_event_api_v1_events__event_id__get",
+                "parameters": [
+                    {
+                        "name": "event_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Event Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ContractEventResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/events/{event_id}/mark-processed": {
+            "post": {
+                "tags": [
+                    "events"
+                ],
+                "summary": "Mark Event Processed",
+                "description": "Mark an event as processed",
+                "operationId": "mark_event_processed_api_v1_events__event_id__mark_processed_post",
+                "parameters": [
+                    {
+                        "name": "event_id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Event Id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/events/summary/stats": {
+            "get": {
+                "tags": [
+                    "events"
+                ],
+                "summary": "Get Event Summary",
+                "description": "Get event summary statistics",
+                "operationId": "get_event_summary_api_v1_events_summary_stats_get",
+                "parameters": [
+                    {
+                        "name": "hours",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 168,
+                            "minimum": 1,
+                            "description": "Number of hours to look back",
+                            "default": 24,
+                            "title": "Hours"
+                        },
+                        "description": "Number of hours to look back"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EventSummary"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/events/blocks/{block_number}": {
+            "get": {
+                "tags": [
+                    "events"
+                ],
+                "summary": "Get Events By Block",
+                "description": "Get all events from a specific block",
+                "operationId": "get_events_by_block_api_v1_events_blocks__block_number__get",
+                "parameters": [
+                    {
+                        "name": "block_number",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "title": "Block Number"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/events/transactions/{tx_hash}": {
+            "get": {
+                "tags": [
+                    "events"
+                ],
+                "summary": "Get Events By Transaction",
+                "description": "Get all events from a specific transaction",
+                "operationId": "get_events_by_transaction_api_v1_events_transactions__tx_hash__get",
+                "parameters": [
+                    {
+                        "name": "tx_hash",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Tx Hash"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/events/cleanup": {
+            "delete": {
+                "tags": [
+                    "events"
+                ],
+                "summary": "Cleanup Old Events",
+                "description": "Clean up old processed events",
+                "operationId": "cleanup_old_events_api_v1_events_cleanup_delete",
+                "parameters": [
+                    {
+                        "name": "days",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 365,
+                            "minimum": 1,
+                            "description": "Delete events older than this many days",
+                            "default": 30,
+                            "title": "Days"
+                        },
+                        "description": "Delete events older than this many days"
+                    },
+                    {
+                        "name": "dry_run",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "description": "If true, only count events to be deleted",
+                            "default": true,
+                            "title": "Dry Run"
+                        },
+                        "description": "If true, only count events to be deleted"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/hybrid/workers": {
+            "get": {
+                "tags": [
+                    "hybrid-graph"
+                ],
+                "summary": "Get Workers Hybrid",
+                "description": "Get workers using The Graph or database based on configuration",
+                "operationId": "get_workers_hybrid_api_v1_hybrid_workers_get",
+                "parameters": [
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "default": 0,
+                            "title": "Skip"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 1000,
+                            "minimum": 1,
+                            "default": 100,
+                            "title": "Limit"
+                        }
+                    },
+                    {
+                        "name": "verified_only",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "default": false,
+                            "title": "Verified Only"
+                        }
+                    },
+                    {
+                        "name": "min_reputation",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "integer",
+                                    "maximum": 1000,
+                                    "minimum": 0
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Min Reputation"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    },
+                                    "title": "Response Get Workers Hybrid Api V1 Hybrid Workers Get"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/hybrid/jobs": {
+            "get": {
+                "tags": [
+                    "hybrid-graph"
+                ],
+                "summary": "Get Jobs Hybrid",
+                "description": "Get jobs using The Graph or database based on configuration",
+                "operationId": "get_jobs_hybrid_api_v1_hybrid_jobs_get",
+                "parameters": [
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "default": 0,
+                            "title": "Skip"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 1000,
+                            "minimum": 1,
+                            "default": 100,
+                            "title": "Limit"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Status"
+                        }
+                    },
+                    {
+                        "name": "creator_address",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Creator Address"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object"
+                                    },
+                                    "title": "Response Get Jobs Hybrid Api V1 Hybrid Jobs Get"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/hybrid/worker/{worker_address}": {
+            "get": {
+                "tags": [
+                    "hybrid-graph"
+                ],
+                "summary": "Get Worker Hybrid",
+                "description": "Get worker details using The Graph or database",
+                "operationId": "get_worker_hybrid_api_v1_hybrid_worker__worker_address__get",
+                "parameters": [
+                    {
+                        "name": "worker_address",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "title": "Worker Address"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/hybrid/available-jobs": {
+            "get": {
+                "tags": [
+                    "hybrid-graph"
+                ],
+                "summary": "Get Available Jobs Hybrid",
+                "description": "Get available jobs using The Graph or database",
+                "operationId": "get_available_jobs_hybrid_api_v1_hybrid_available_jobs_get",
+                "parameters": [
+                    {
+                        "name": "worker_address",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "null"
+                                }
+                            ],
+                            "title": "Worker Address"
+                        }
+                    },
+                    {
+                        "name": "skip",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "default": 0,
+                            "title": "Skip"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 200,
+                            "minimum": 1,
+                            "default": 50,
+                            "title": "Limit"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/hybrid/stats/global": {
+            "get": {
+                "tags": [
+                    "hybrid-graph"
+                ],
+                "summary": "Get Global Stats Hybrid",
+                "description": "Get global statistics using The Graph or database",
+                "operationId": "get_global_stats_hybrid_api_v1_hybrid_stats_global_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/hybrid/stats/daily": {
+            "get": {
+                "tags": [
+                    "hybrid-graph"
+                ],
+                "summary": "Get Daily Stats Hybrid",
+                "description": "Get daily statistics using The Graph",
+                "operationId": "get_daily_stats_hybrid_api_v1_hybrid_stats_daily_get",
+                "parameters": [
+                    {
+                        "name": "days",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "maximum": 30,
+                            "minimum": 1,
+                            "default": 7,
+                            "title": "Days"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation Error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/HTTPValidationError"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/": {
+            "get": {
+                "summary": "Root",
+                "description": "Health check endpoint",
+                "operationId": "root__get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/health": {
+            "get": {
+                "summary": "Health Check",
+                "description": "Detailed health check",
+                "operationId": "health_check_health_get",
+                "responses": {
+                    "200": {
+                        "description": "Successful Response",
+                        "content": {
+                            "application/json": {
+                                "schema": {}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AuthRequest": {
+                "properties": {
+                    "address": {
+                        "type": "string",
+                        "title": "Address",
+                        "description": "StarkNet address of the worker"
+                    },
+                    "message": {
+                        "type": "string",
+                        "title": "Message",
+                        "description": "Original challenge message"
+                    },
+                    "signature": {
+                        "items": {
+                            "type": "string"
+                        },
+                        "type": "array",
+                        "title": "Signature",
+                        "description": "Signature components"
+                    },
+                    "timestamp": {
+                        "type": "integer",
+                        "title": "Timestamp",
+                        "description": "Challenge timestamp"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "address",
+                    "message",
+                    "signature",
+                    "timestamp"
+                ],
+                "title": "AuthRequest",
+                "description": "Request for authentication with signed challenge."
+            },
+            "AuthResponse": {
+                "properties": {
+                    "access_token": {
+                        "type": "string",
+                        "title": "Access Token",
+                        "description": "JWT access token"
+                    },
+                    "refresh_token": {
+                        "type": "string",
+                        "title": "Refresh Token",
+                        "description": "JWT refresh token"
+                    },
+                    "token_type": {
+                        "type": "string",
+                        "title": "Token Type",
+                        "description": "Token type",
+                        "default": "bearer"
+                    },
+                    "expires_in": {
+                        "type": "integer",
+                        "title": "Expires In",
+                        "description": "Token expiration time in seconds"
+                    },
+                    "worker": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/WorkerResponse"
+                            }
+                        ],
+                        "description": "Authenticated worker information"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "access_token",
+                    "refresh_token",
+                    "expires_in",
+                    "worker"
+                ],
+                "title": "AuthResponse",
+                "description": "Response after successful authentication."
+            },
+            "ChallengeRequest": {
+                "properties": {
+                    "address": {
+                        "type": "string",
+                        "title": "Address",
+                        "description": "StarkNet address of the worker"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "address"
+                ],
+                "title": "ChallengeRequest",
+                "description": "Request for authentication challenge."
+            },
+            "ChallengeResponse": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "title": "Message",
+                        "description": "Message to be signed"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "title": "Timestamp",
+                        "description": "Challenge timestamp"
+                    },
+                    "nonce": {
+                        "type": "string",
+                        "title": "Nonce",
+                        "description": "Random nonce"
+                    },
+                    "expires_at": {
+                        "type": "string",
+                        "title": "Expires At",
+                        "description": "Challenge expiration timestamp"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "message",
+                    "timestamp",
+                    "nonce",
+                    "expires_at"
+                ],
+                "title": "ChallengeResponse",
+                "description": "Response containing authentication challenge."
+            },
+            "ContractEventResponse": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Id"
+                    },
+                    "transaction_hash": {
+                        "type": "string",
+                        "title": "Transaction Hash"
+                    },
+                    "block_number": {
+                        "type": "integer",
+                        "title": "Block Number"
+                    },
+                    "event_index": {
+                        "type": "integer",
+                        "title": "Event Index"
+                    },
+                    "contract_address": {
+                        "type": "string",
+                        "title": "Contract Address"
+                    },
+                    "event_name": {
+                        "type": "string",
+                        "title": "Event Name"
+                    },
+                    "event_data": {
+                        "type": "string",
+                        "title": "Event Data"
+                    },
+                    "processed": {
+                        "type": "boolean",
+                        "title": "Processed",
+                        "default": false
+                    },
+                    "processed_at": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Processed At"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Timestamp"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "transaction_hash",
+                    "block_number",
+                    "event_index",
+                    "contract_address",
+                    "event_name",
+                    "event_data",
+                    "timestamp"
+                ],
+                "title": "ContractEventResponse",
+                "description": "Schema for contract event responses"
+            },
+            "EventSummary": {
+                "properties": {
+                    "total_events": {
+                        "type": "integer",
+                        "title": "Total Events"
+                    },
+                    "events_by_type": {
+                        "additionalProperties": {
+                            "type": "integer"
+                        },
+                        "type": "object",
+                        "title": "Events By Type"
+                    },
+                    "processed_events": {
+                        "type": "integer",
+                        "title": "Processed Events"
+                    },
+                    "unprocessed_events": {
+                        "type": "integer",
+                        "title": "Unprocessed Events"
+                    },
+                    "latest_block_processed": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Latest Block Processed"
+                    },
+                    "timeframe_hours": {
+                        "type": "integer",
+                        "title": "Timeframe Hours"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "total_events",
+                    "events_by_type",
+                    "processed_events",
+                    "unprocessed_events",
+                    "timeframe_hours"
+                ],
+                "title": "EventSummary",
+                "description": "Schema for event summary statistics"
+            },
+            "HTTPValidationError": {
+                "properties": {
+                    "detail": {
+                        "items": {
+                            "$ref": "#/components/schemas/ValidationError"
+                        },
+                        "type": "array",
+                        "title": "Detail"
+                    }
+                },
+                "type": "object",
+                "title": "HTTPValidationError"
+            },
+            "JobAssignment": {
+                "properties": {
+                    "worker_address": {
+                        "type": "string",
+                        "title": "Worker Address",
+                        "description": "Address of the worker to assign"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "worker_address"
+                ],
+                "title": "JobAssignment",
+                "description": "Schema for assigning a job to a worker"
+            },
+            "JobCompletion": {
+                "properties": {
+                    "result_cid_part1": {
+                        "type": "string",
+                        "title": "Result Cid Part1",
+                        "description": "First part of result IPFS CID"
+                    },
+                    "result_cid_part2": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Result Cid Part2",
+                        "description": "Second part of result IPFS CID"
+                    },
+                    "quality_score": {
+                        "type": "integer",
+                        "maximum": 100.0,
+                        "minimum": 0.0,
+                        "title": "Quality Score",
+                        "description": "Quality score (0-100)"
+                    },
+                    "worker_address": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Worker Address",
+                        "description": "Worker who completed the job"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "result_cid_part1",
+                    "quality_score"
+                ],
+                "title": "JobCompletion",
+                "description": "Schema for completing a job"
+            },
+            "JobCreate": {
+                "properties": {
+                    "chain_job_id": {
+                        "type": "integer",
+                        "title": "Chain Job Id",
+                        "description": "On-chain job ID"
+                    },
+                    "creator_address": {
+                        "type": "string",
+                        "title": "Creator Address",
+                        "description": "Address of job creator"
+                    },
+                    "asset_cid_part1": {
+                        "type": "string",
+                        "title": "Asset Cid Part1",
+                        "description": "First part of asset IPFS CID"
+                    },
+                    "asset_cid_part2": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Asset Cid Part2",
+                        "description": "Second part of asset IPFS CID"
+                    },
+                    "reward_amount": {
+                        "type": "integer",
+                        "title": "Reward Amount",
+                        "description": "Reward amount in wei"
+                    },
+                    "deadline": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Deadline",
+                        "description": "Job deadline"
+                    },
+                    "min_reputation": {
+                        "type": "integer",
+                        "title": "Min Reputation",
+                        "description": "Minimum worker reputation required",
+                        "default": 400
+                    },
+                    "required_capabilities": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Required Capabilities",
+                        "description": "JSON string of required capabilities"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "chain_job_id",
+                    "creator_address",
+                    "asset_cid_part1",
+                    "reward_amount",
+                    "deadline"
+                ],
+                "title": "JobCreate",
+                "description": "Schema for creating a job"
+            },
+            "JobEventResponse": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Id"
+                    },
+                    "job_id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Job Id"
+                    },
+                    "event_type": {
+                        "type": "string",
+                        "title": "Event Type"
+                    },
+                    "transaction_hash": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Transaction Hash"
+                    },
+                    "block_number": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Block Number"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Timestamp"
+                    },
+                    "actor_address": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Actor Address"
+                    },
+                    "event_data": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Event Data"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "job_id",
+                    "event_type",
+                    "timestamp"
+                ],
+                "title": "JobEventResponse",
+                "description": "Schema for job event responses"
+            },
+            "JobResponse": {
+                "properties": {
+                    "chain_job_id": {
+                        "type": "integer",
+                        "title": "Chain Job Id",
+                        "description": "On-chain job ID"
+                    },
+                    "creator_address": {
+                        "type": "string",
+                        "title": "Creator Address",
+                        "description": "Address of job creator"
+                    },
+                    "asset_cid_part1": {
+                        "type": "string",
+                        "title": "Asset Cid Part1",
+                        "description": "First part of asset IPFS CID"
+                    },
+                    "asset_cid_part2": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Asset Cid Part2",
+                        "description": "Second part of asset IPFS CID"
+                    },
+                    "reward_amount": {
+                        "type": "integer",
+                        "title": "Reward Amount",
+                        "description": "Reward amount in wei"
+                    },
+                    "deadline": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Deadline",
+                        "description": "Job deadline"
+                    },
+                    "min_reputation": {
+                        "type": "integer",
+                        "title": "Min Reputation",
+                        "description": "Minimum worker reputation required",
+                        "default": 400
+                    },
+                    "required_capabilities": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Required Capabilities",
+                        "description": "JSON string of required capabilities"
+                    },
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Id"
+                    },
+                    "full_asset_cid": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Full Asset Cid"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Created At"
+                    },
+                    "worker_id": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "format": "uuid"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Worker Id"
+                    },
+                    "assigned_at": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Assigned At"
+                    },
+                    "completed_at": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Completed At"
+                    },
+                    "result_cid_part1": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Result Cid Part1"
+                    },
+                    "result_cid_part2": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Result Cid Part2"
+                    },
+                    "full_result_cid": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Full Result Cid"
+                    },
+                    "quality_score": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Quality Score"
+                    },
+                    "status": {
+                        "type": "string",
+                        "title": "Status",
+                        "default": "open"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "chain_job_id",
+                    "creator_address",
+                    "asset_cid_part1",
+                    "reward_amount",
+                    "deadline",
+                    "id",
+                    "created_at"
+                ],
+                "title": "JobResponse",
+                "description": "Schema for job API responses"
+            },
+            "LogoutRequest": {
+                "properties": {
+                    "refresh_token": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Refresh Token",
+                        "description": "Refresh token to invalidate"
+                    }
+                },
+                "type": "object",
+                "title": "LogoutRequest",
+                "description": "Request to logout (invalidate tokens)."
+            },
+            "RefreshRequest": {
+                "properties": {
+                    "refresh_token": {
+                        "type": "string",
+                        "title": "Refresh Token",
+                        "description": "Valid refresh token"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "refresh_token"
+                ],
+                "title": "RefreshRequest",
+                "description": "Request to refresh access token."
+            },
+            "RefreshResponse": {
+                "properties": {
+                    "access_token": {
+                        "type": "string",
+                        "title": "Access Token",
+                        "description": "New JWT access token"
+                    },
+                    "token_type": {
+                        "type": "string",
+                        "title": "Token Type",
+                        "description": "Token type",
+                        "default": "bearer"
+                    },
+                    "expires_in": {
+                        "type": "integer",
+                        "title": "Expires In",
+                        "description": "Token expiration time in seconds"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "access_token",
+                    "expires_in"
+                ],
+                "title": "RefreshResponse",
+                "description": "Response with new access token."
+            },
+            "ReputationHistoryResponse": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Id"
+                    },
+                    "old_reputation": {
+                        "type": "integer",
+                        "title": "Old Reputation"
+                    },
+                    "new_reputation": {
+                        "type": "integer",
+                        "title": "New Reputation"
+                    },
+                    "change_amount": {
+                        "type": "integer",
+                        "title": "Change Amount"
+                    },
+                    "reason": {
+                        "type": "string",
+                        "title": "Reason"
+                    },
+                    "job_chain_id": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Job Chain Id"
+                    },
+                    "quality_score": {
+                        "anyOf": [
+                            {
+                                "type": "integer"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Quality Score"
+                    },
+                    "changed_by": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Changed By"
+                    },
+                    "transaction_hash": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Transaction Hash"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Timestamp"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "id",
+                    "old_reputation",
+                    "new_reputation",
+                    "change_amount",
+                    "reason",
+                    "timestamp"
+                ],
+                "title": "ReputationHistoryResponse",
+                "description": "Schema for reputation history entries"
+            },
+            "TokenPayload": {
+                "properties": {
+                    "sub": {
+                        "type": "string",
+                        "title": "Sub",
+                        "description": "Subject (worker address)"
+                    },
+                    "role": {
+                        "type": "string",
+                        "title": "Role",
+                        "description": "User role",
+                        "default": "worker"
+                    },
+                    "exp": {
+                        "type": "integer",
+                        "title": "Exp",
+                        "description": "Expiration timestamp"
+                    },
+                    "iat": {
+                        "type": "integer",
+                        "title": "Iat",
+                        "description": "Issued at timestamp"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Type",
+                        "description": "Token type (access/refresh)"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "sub",
+                    "exp",
+                    "iat",
+                    "type"
+                ],
+                "title": "TokenPayload",
+                "description": "JWT token payload structure."
+            },
+            "ValidationError": {
+                "properties": {
+                    "loc": {
+                        "items": {
+                            "anyOf": [
+                                {
+                                    "type": "string"
+                                },
+                                {
+                                    "type": "integer"
+                                }
+                            ]
+                        },
+                        "type": "array",
+                        "title": "Location"
+                    },
+                    "msg": {
+                        "type": "string",
+                        "title": "Message"
+                    },
+                    "type": {
+                        "type": "string",
+                        "title": "Error Type"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "loc",
+                    "msg",
+                    "type"
+                ],
+                "title": "ValidationError"
+            },
+            "VerifyTokenRequest": {
+                "properties": {
+                    "token": {
+                        "type": "string",
+                        "title": "Token",
+                        "description": "Token to verify"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "token"
+                ],
+                "title": "VerifyTokenRequest",
+                "description": "Request to verify token validity."
+            },
+            "VerifyTokenResponse": {
+                "properties": {
+                    "valid": {
+                        "type": "boolean",
+                        "title": "Valid",
+                        "description": "Whether token is valid"
+                    },
+                    "payload": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/components/schemas/TokenPayload"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "description": "Token payload if valid"
+                    },
+                    "error": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Error",
+                        "description": "Error message if invalid"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "valid"
+                ],
+                "title": "VerifyTokenResponse",
+                "description": "Response with token verification result."
+            },
+            "WorkerRegistration": {
+                "properties": {
+                    "address": {
+                        "type": "string",
+                        "title": "Address",
+                        "description": "StarkNet address of the worker"
+                    },
+                    "public_key": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Public Key",
+                        "description": "Public key for verification"
+                    },
+                    "info_cid": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Info Cid",
+                        "description": "IPFS CID for worker information"
+                    },
+                    "capabilities": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Capabilities",
+                        "description": "JSON string of worker capabilities"
+                    },
+                    "hardware_specs": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Hardware Specs",
+                        "description": "JSON string of hardware specifications"
+                    },
+                    "contact_info": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Contact Info",
+                        "description": "Contact information"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "address"
+                ],
+                "title": "WorkerRegistration",
+                "description": "Schema for worker registration"
+            },
+            "WorkerResponse": {
+                "properties": {
+                    "address": {
+                        "type": "string",
+                        "title": "Address",
+                        "description": "StarkNet address of the worker"
+                    },
+                    "public_key": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Public Key",
+                        "description": "Public key for verification"
+                    },
+                    "info_cid": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Info Cid",
+                        "description": "IPFS CID for worker information"
+                    },
+                    "capabilities": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Capabilities",
+                        "description": "JSON string of worker capabilities"
+                    },
+                    "hardware_specs": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Hardware Specs",
+                        "description": "JSON string of hardware specifications"
+                    },
+                    "contact_info": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Contact Info",
+                        "description": "Contact information"
+                    },
+                    "id": {
+                        "type": "string",
+                        "format": "uuid",
+                        "title": "Id"
+                    },
+                    "registered_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "title": "Registered At"
+                    },
+                    "verified": {
+                        "type": "boolean",
+                        "title": "Verified",
+                        "default": false
+                    },
+                    "verified_at": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Verified At"
+                    },
+                    "verified_by": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Verified By"
+                    },
+                    "reputation": {
+                        "type": "integer",
+                        "title": "Reputation",
+                        "default": 500
+                    },
+                    "jobs_completed": {
+                        "type": "integer",
+                        "title": "Jobs Completed",
+                        "default": 0
+                    },
+                    "jobs_failed": {
+                        "type": "integer",
+                        "title": "Jobs Failed",
+                        "default": 0
+                    },
+                    "total_earnings": {
+                        "type": "integer",
+                        "title": "Total Earnings",
+                        "default": 0
+                    },
+                    "active": {
+                        "type": "boolean",
+                        "title": "Active",
+                        "default": true
+                    },
+                    "is_admin": {
+                        "type": "boolean",
+                        "title": "Is Admin",
+                        "default": false
+                    },
+                    "last_seen": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Last Seen"
+                    }
+                },
+                "type": "object",
+                "required": [
+                    "address",
+                    "id",
+                    "registered_at"
+                ],
+                "title": "WorkerResponse",
+                "description": "Schema for worker API responses"
+            },
+            "WorkerUpdate": {
+                "properties": {
+                    "public_key": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Public Key"
+                    },
+                    "info_cid": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Info Cid"
+                    },
+                    "capabilities": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Capabilities"
+                    },
+                    "hardware_specs": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Hardware Specs"
+                    },
+                    "contact_info": {
+                        "anyOf": [
+                            {
+                                "type": "string"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Contact Info"
+                    },
+                    "active": {
+                        "anyOf": [
+                            {
+                                "type": "boolean"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ],
+                        "title": "Active"
+                    }
+                },
+                "type": "object",
+                "title": "WorkerUpdate",
+                "description": "Schema for updating worker information"
+            }
+        },
+        "securitySchemes": {
+            "HTTPBearer": {
+                "type": "http",
+                "scheme": "bearer"
+            }
+        }
+    }
+}

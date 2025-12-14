@@ -2,8 +2,8 @@
 version = 1
 
 [[package]]
-name = "fluxframe_job_registry"
-version = "0.1.0"
+name = "galaxyrend_job_registry"
+version = "0.2.0"
 dependencies = [
  "openzeppelin_access",
  "openzeppelin_security",

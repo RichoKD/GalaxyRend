@@ -1,4 +1,4 @@
-# FluxFrame Frontend Architecture
+# GalaxyRend Frontend Architecture
 
 ## Recommended Tech Stack
 
@@ -141,8 +141,8 @@ frontend/
 
 ### Phase 1: Core Setup
 ```bash
-npx create-next-app@latest fluxframe-frontend --typescript --tailwind --app
-cd fluxframe-frontend
+npx create-next-app@latest galaxyrend-frontend --typescript --tailwind --app
+cd galaxyrend-frontend
 npm install starknet get-starknet @starknet-react/core @starknet-react/chains
 npm install zustand @tanstack/react-query
 npm install react-hook-form @hookform/resolvers zod
@@ -267,7 +267,7 @@ export function JobForm() {
 - **Scalable**: Component-based architecture
 - **Web3 Native**: Built for StarkNet ecosystem
 
-### 🎯 **Perfect for FluxFrame**
+### 🎯 **Perfect for galaxyrend**
 - Handles file uploads seamlessly
 - Real-time job tracking
 - Wallet integration out of the box
