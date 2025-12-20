@@ -234,7 +234,7 @@ class EventIndexer:
         """Process JobCreated event"""
         try:
             job_id = int(event_data[0])
-            creator_address = event_data[1]
+            # creator_address = event_data[1]
             reward = int(event_data[2])
             deadline = int(event_data[3])  # Timestamp
             
@@ -334,7 +334,7 @@ class EventIndexer:
         """Process JobCancelled event"""
         try:
             job_id = int(event_data[0])
-            refund_amount = int(event_data[2])
+            # refund_amount = int(event_data[2])
             
             query = select(Job).where(Job.chain_job_id == job_id)
             result = await db.execute(query)
