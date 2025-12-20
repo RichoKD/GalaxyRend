@@ -1,20 +1,23 @@
-# FluxFrame Frontend Architecture
+# GalaxyRend Frontend Architecture
 
 ## Recommended Tech Stack
 
 ### Core
+
 - **Framework**: Next.js 14+ (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS + Shadcn/ui
 - **State Management**: Zustand + React Query
 
 ### Web3 Integration
+
 - **StarkNet SDK**: starknet.js
 - **Wallet Connection**: get-starknet
 - **React Hooks**: starknet-react
 - **IPFS**: ipfs-http-client
 
 ### Additional Tools
+
 - **File Upload**: react-dropzone
 - **Forms**: React Hook Form + Zod validation
 - **Charts**: Recharts
@@ -101,6 +104,7 @@ frontend/
 ## Key Features to Implement
 
 ### 1. Job Creation Flow
+
 ```typescript
 // components/jobs/JobForm.tsx
 1. Upload .blend file → IPFS
@@ -111,6 +115,7 @@ frontend/
 ```
 
 ### 2. Job Discovery & Tracking
+
 ```typescript
 // hooks/useJobRegistry.ts
 - Real-time job updates via contract events
@@ -120,6 +125,7 @@ frontend/
 ```
 
 ### 3. Result Viewing
+
 ```typescript
 // components/jobs/JobResults.tsx
 - Display rendered images from IPFS
@@ -129,6 +135,7 @@ frontend/
 ```
 
 ### 4. Wallet Integration
+
 ```typescript
 // components/web3/ConnectWallet.tsx
 - Connect ArgentX/Braavos wallets
@@ -140,9 +147,10 @@ frontend/
 ## Implementation Steps
 
 ### Phase 1: Core Setup
+
 ```bash
-npx create-next-app@latest fluxframe-frontend --typescript --tailwind --app
-cd fluxframe-frontend
+npx create-next-app@latest galaxyrend-frontend --typescript --tailwind --app
+cd galaxyrend-frontend
 npm install starknet get-starknet @starknet-react/core @starknet-react/chains
 npm install zustand @tanstack/react-query
 npm install react-hook-form @hookform/resolvers zod
@@ -150,11 +158,12 @@ npm install react-dropzone ipfs-http-client
 npx shadcn-ui@latest init
 ```
 
-### Phase 2: Web3 Integration
+###GalaxyRend Web3 Integration
+
 ```typescript
 // lib/starknet.ts
 export const provider = new RpcProvider({
-  nodeUrl: process.env.NEXT_PUBLIC_STARKNET_RPC
+  nodeUrl: process.env.NEXT_PUBLIC_STARKNET_RPC,
 });
 
 export const jobRegistryContract = new Contract(
@@ -165,6 +174,7 @@ export const jobRegistryContract = new Contract(
 ```
 
 ### Phase 3: Key Components
+
 ```typescript
 // components/jobs/JobForm.tsx
 - File upload with validation
@@ -180,6 +190,7 @@ export const jobRegistryContract = new Contract(
 ```
 
 ### Phase 4: Advanced Features
+
 ```typescript
 // Real-time updates
 - WebSocket connection for job status
@@ -192,52 +203,52 @@ export const jobRegistryContract = new Contract(
 
 ```typescript
 // components/jobs/JobForm.tsx
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { useContract } from '@starknet-react/core';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
+import { useState } from "react";
+import { useContract } from "@starknet-react/core";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
 
 const jobSchema = z.object({
   blendFile: z.instanceof(File),
   reward: z.number().min(0.001),
   deadline: z.date().min(new Date()),
-  description: z.string().min(10).max(500)
+  description: z.string().min(10).max(500),
 });
 
 export function JobForm() {
   const [uploading, setUploading] = useState(false);
   const { contract } = useContract({
     abi: jobRegistryAbi,
-    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS
+    address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
   });
 
   const form = useForm<z.infer<typeof jobSchema>>({
-    resolver: zodResolver(jobSchema)
+    resolver: zodResolver(jobSchema),
   });
 
   const onSubmit = async (data: z.infer<typeof jobSchema>) => {
     try {
       setUploading(true);
-      
+
       // 1. Upload to IPFS
       const ipfsHash = await uploadToIPFS(data.blendFile);
-      
+
       // 2. Create job on contract
       const result = await contract.create_job(
         ipfsHash,
         parseUnits(data.reward.toString(), 18),
         Math.floor(data.deadline.getTime() / 1000)
       );
-      
+
       // 3. Wait for confirmation
       await provider.waitForTransaction(result.transaction_hash);
-      
-      toast.success('Job created successfully!');
+
+      toast.success("Job created successfully!");
     } catch (error) {
-      toast.error('Failed to create job');
+      toast.error("Failed to create job");
     } finally {
       setUploading(false);
     }
@@ -246,11 +257,11 @@ export function JobForm() {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
-        <BlendFileUpload {...form.register('blendFile')} />
-        <RewardInput {...form.register('reward')} />
-        <DeadlineSelector {...form.register('deadline')} />
+        <BlendFileUpload {...form.register("blendFile")} />
+        <RewardInput {...form.register("reward")} />
+        <DeadlineSelector {...form.register("deadline")} />
         <Button type="submit" disabled={uploading}>
-          {uploading ? 'Creating Job...' : 'Create Job'}
+          {uploading ? "Creating Job..." : "Create Job"}
         </Button>
       </form>
     </Form>
@@ -261,13 +272,15 @@ export function JobForm() {
 ## Why This Approach?
 
 ### ✅ **Advantages**
+
 - **User-Friendly**: Familiar Web2 UX with Web3 integration
 - **Performance**: SSR + optimized bundles
 - **Developer Experience**: TypeScript + modern tooling
 - **Scalable**: Component-based architecture
 - **Web3 Native**: Built for StarkNet ecosystem
 
-### 🎯 **Perfect for FluxFrame**
+### 🎯 **Perfect for GalaxyRend**
+
 - Handles file uploads seamlessly
 - Real-time job tracking
 - Wallet integration out of the box

@@ -5,6 +5,7 @@ Complete testing strategy for the API-based worker.
 ## Test Environment Setup
 
 ### Prerequisites
+
 ```bash
 # 1. Backend running
 cd backend
@@ -22,6 +23,7 @@ npm run dev
 ### Test Data Preparation
 
 Create a simple test `.blend` file:
+
 ```python
 # save as create_test_blend.py
 import bpy
@@ -46,11 +48,13 @@ print("Created test_scene.blend")
 ```
 
 Run it:
+
 ```bash
 blender --background --python create_test_blend.py
 ```
 
 Upload to IPFS:
+
 ```bash
 ipfs add test_scene.blend
 # Note the CID: QmXyz...
@@ -63,6 +67,7 @@ ipfs add test_scene.blend
 **Purpose**: Verify worker can authenticate with backend
 
 **Test Code**:
+
 ```python
 import asyncio
 from src.main_api import WorkerAuthenticator
@@ -73,7 +78,7 @@ async def test_auth():
         worker_address="0x1234567890abcdef1234567890abcdef12345678",
         private_key=""
     )
-    
+
     success = await auth.authenticate()
     assert success, "Authentication should succeed"
     assert auth.token is not None, "Token should be set"
@@ -83,6 +88,7 @@ asyncio.run(test_auth())
 ```
 
 **Expected Output**:
+
 ```
 [Worker] Requesting auth challenge for 0x1234...
 [Worker] Submitting signed challenge
@@ -95,6 +101,7 @@ asyncio.run(test_auth())
 **Purpose**: Verify IPFS download/upload works
 
 **Test Code**:
+
 ```python
 import tempfile
 import os
@@ -102,29 +109,30 @@ from src.main_api import IPFSClient
 
 def test_ipfs():
     ipfs = IPFSClient("/ip4/127.0.0.1/tcp/5001")
-    
+
     # Test upload
     test_file = "test.txt"
     with open(test_file, 'w') as f:
-        f.write("Hello, FluxFrame!")
-    
+        f.write("Hello, GalaxyRend!")
+
     result = ipfs.add(test_file)
     cid = result["Hash"]
     print(f"✅ Uploaded file, CID: {cid}")
-    
+
     # Test download
     with tempfile.TemporaryDirectory() as temp_dir:
         ipfs.get(cid, temp_dir)
         downloaded = os.path.join(temp_dir, cid)
         assert os.path.exists(downloaded), "File should be downloaded"
         print(f"✅ Downloaded file to: {downloaded}")
-    
+
     os.remove(test_file)
 
 test_ipfs()
 ```
 
 **Expected Output**:
+
 ```
 [Worker] Connected to IPFS using ipfshttpclient
 ✅ Uploaded file, CID: QmXyz...
@@ -137,6 +145,7 @@ test_ipfs()
 **Purpose**: Verify Blender can open files
 
 **Test Code**:
+
 ```python
 import asyncio
 from src.main_api import validate_blend_file
@@ -146,21 +155,22 @@ async def test_validation():
     valid = await validate_blend_file("test_scene.blend")
     assert valid, "Valid blend file should pass"
     print("✅ Valid blend file validated")
-    
+
     # Test invalid file
     with open("invalid.blend", 'w') as f:
         f.write("not a blend file")
-    
+
     invalid = await validate_blend_file("invalid.blend")
     assert not invalid, "Invalid blend file should fail"
     print("✅ Invalid blend file rejected")
-    
+
     os.remove("invalid.blend")
 
 asyncio.run(test_validation())
 ```
 
 **Expected Output**:
+
 ```
 [Worker] Validating blend file: test_scene.blend
 [Worker] Blend file validation successful
@@ -175,6 +185,7 @@ asyncio.run(test_validation())
 **Purpose**: Verify Blender can render
 
 **Test Code**:
+
 ```python
 import asyncio
 import tempfile
@@ -183,7 +194,7 @@ from src.main_api import render_blend_file
 async def test_render():
     with tempfile.TemporaryDirectory() as temp_dir:
         result = await render_blend_file("test_scene.blend", temp_dir)
-        
+
         assert result is not None, "Render should succeed"
         assert os.path.exists(result), "Rendered file should exist"
         print(f"✅ Render successful: {result}")
@@ -192,6 +203,7 @@ asyncio.run(test_render())
 ```
 
 **Expected Output**:
+
 ```
 [Worker] Rendering blend file to: /tmp/tmpxyz/render.png
 [Worker] Executing: blender -b test_scene.blend -E BLENDER_EEVEE ...
@@ -206,6 +218,7 @@ asyncio.run(test_render())
 **Purpose**: Verify worker can poll for jobs
 
 **Test Code**:
+
 ```python
 import asyncio
 from src.main_api import WorkerAuthenticator, poll_available_jobs
@@ -215,10 +228,10 @@ async def test_polling():
         backend_url="http://localhost:8000/api/v1",
         worker_address="0x1234567890abcdef1234567890abcdef12345678"
     )
-    
+
     await auth.authenticate()
     jobs = await poll_available_jobs(auth)
-    
+
     print(f"✅ Found {len(jobs)} available jobs")
     for job in jobs:
         print(f"   - Job {job['id']}: {job.get('asset_cid', 'N/A')}")
@@ -227,6 +240,7 @@ asyncio.run(test_polling())
 ```
 
 **Expected Output**:
+
 ```
 [Worker] Requesting auth challenge...
 [Worker] Successfully authenticated...
@@ -241,6 +255,7 @@ asyncio.run(test_polling())
 **Setup**: Create a job in the frontend first
 
 **Test Code**:
+
 ```python
 import asyncio
 from src.main_api import WorkerAuthenticator, poll_available_jobs, claim_job
@@ -250,17 +265,17 @@ async def test_claim():
         backend_url="http://localhost:8000/api/v1",
         worker_address="0x1234567890abcdef1234567890abcdef12345678"
     )
-    
+
     await auth.authenticate()
     jobs = await poll_available_jobs(auth)
-    
+
     if not jobs:
         print("⚠️  No jobs available to claim")
         return
-    
+
     job_id = jobs[0]["id"]
     success = await claim_job(auth, job_id)
-    
+
     assert success, "Job claim should succeed"
     print(f"✅ Successfully claimed job {job_id}")
 
@@ -268,6 +283,7 @@ asyncio.run(test_claim())
 ```
 
 **Expected Output**:
+
 ```
 [Worker] Successfully authenticated...
 [Worker] Found 1 available jobs
@@ -279,15 +295,17 @@ asyncio.run(test_claim())
 
 **Purpose**: Test complete job workflow
 
-**Setup**: 
+**Setup**:
+
 1. Create a job in frontend with `test_scene.blend` CID
 2. Run test
 
 **Test Code**:
+
 ```python
 import asyncio
 from src.main_api import (
-    WorkerAuthenticator, 
+    WorkerAuthenticator,
     IPFSClient,
     poll_available_jobs,
     claim_job,
@@ -302,43 +320,44 @@ async def test_full_workflow():
         worker_address="0x1234567890abcdef1234567890abcdef12345678"
     )
     ipfs = IPFSClient("/ip4/127.0.0.1/tcp/5001")
-    
+
     # Authenticate
     await auth.authenticate()
     print("✅ Authenticated")
-    
+
     # Poll for jobs
     jobs = await poll_available_jobs(auth)
     if not jobs:
         print("⚠️  No jobs available")
         return
-    
+
     job = jobs[0]
     job_id = job["id"]
     asset_cid = job.get("asset_cid", "")
     print(f"✅ Found job {job_id}")
-    
+
     # Claim job
     claimed = await claim_job(auth, job_id)
     assert claimed
     print(f"✅ Claimed job {job_id}")
-    
+
     # Process job
     result_cid = await process_render_job(ipfs, job_id, asset_cid)
     assert result_cid
     print(f"✅ Processed job, result: {result_cid}")
-    
+
     # Submit result
     submitted = await submit_job_completion(auth, job_id, result_cid)
     assert submitted
     print(f"✅ Submitted result for job {job_id}")
-    
+
     print(f"\n🎉 Full workflow completed successfully!")
 
 asyncio.run(test_full_workflow())
 ```
 
 **Expected Output**:
+
 ```
 [Worker] Successfully authenticated...
 ✅ Authenticated
@@ -363,6 +382,7 @@ asyncio.run(test_full_workflow())
 **Steps**:
 
 1. **Start all services**:
+
 ```bash
 # Terminal 1: Backend
 cd backend && uvicorn app.main:app --reload
@@ -378,6 +398,7 @@ cd worker && python3 src/main_api.py
 ```
 
 2. **Create a job**:
+
    - Go to `http://localhost:3000/dashboard/creators`
    - Click "Create Job"
    - Upload `test_scene.blend` to IPFS
@@ -385,6 +406,7 @@ cd worker && python3 src/main_api.py
    - Submit
 
 3. **Observe worker**:
+
    - Watch worker terminal for job pickup
    - Should see: Found job → Claimed → Downloaded → Rendered → Uploaded → Submitted
 
@@ -395,6 +417,7 @@ cd worker && python3 src/main_api.py
    - Timeline should show worker assignment and completion
 
 **Success Criteria**:
+
 - ✅ Job created in frontend
 - ✅ Worker picked up job within 10 seconds
 - ✅ Worker completed rendering
@@ -418,13 +441,15 @@ cd worker && python3 src/main_api.py
 
 **Purpose**: Test multiple workers don't conflict
 
-**Setup**: 
+**Setup**:
+
 1. Configure two workers with different addresses
 2. Create 10 jobs
 
 **Test**: Run both workers simultaneously
 
-**Expected**: 
+**Expected**:
+
 - Each worker claims different jobs
 - No jobs are processed twice
 - All jobs complete successfully
@@ -436,11 +461,13 @@ cd worker && python3 src/main_api.py
 **Scenario**: IPFS goes down during job processing
 
 **Test**:
+
 1. Worker claims job
 2. Stop IPFS daemon
 3. Observe error handling
 
 **Expected**:
+
 - Worker logs IPFS error
 - Worker skips job
 - Worker continues polling after IPFS restarts
@@ -450,11 +477,13 @@ cd worker && python3 src/main_api.py
 **Scenario**: Backend crashes during polling
 
 **Test**:
+
 1. Worker is running
 2. Stop backend
 3. Observe error handling
 
 **Expected**:
+
 - Worker logs API error
 - Worker retries authentication
 - Worker resumes when backend restarts
@@ -464,10 +493,12 @@ cd worker && python3 src/main_api.py
 **Scenario**: Job has corrupted .blend file
 
 **Test**:
+
 1. Create job with non-blend file CID
 2. Worker claims job
 
 **Expected**:
+
 - Worker downloads file
 - Validation fails
 - Worker logs error and skips job
@@ -478,10 +509,12 @@ cd worker && python3 src/main_api.py
 **Scenario**: Complex scene takes too long
 
 **Test**:
+
 1. Create job with very complex scene
 2. Worker starts rendering
 
 **Expected**:
+
 - Render hits 300s timeout
 - Worker logs timeout error
 - Worker skips job
@@ -536,6 +569,7 @@ async def test_ipfs_upload():
 ```
 
 Run tests:
+
 ```bash
 pip install pytest pytest-asyncio
 pytest tests/test_worker.py -v

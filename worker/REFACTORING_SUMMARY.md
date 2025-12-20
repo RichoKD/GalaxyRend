@@ -2,16 +2,18 @@
 
 ## What Was Changed
 
-Successfully refactored the FluxFrame worker from blockchain-based polling to API-based workflow.
+Successfully refactored the GalaxyRend worker from blockchain-based polling to API-based workflow.
 
 ### Files Created
 
 1. **`worker/src/main_api.py`** (640 lines)
+
    - New API-based worker implementation
    - Replaces direct blockchain access with backend API calls
    - Preserves all rendering logic from original worker
 
 2. **`worker/.env.example`**
+
    - Template for environment configuration
    - Includes new variables for backend API and authentication
 
@@ -26,6 +28,7 @@ Successfully refactored the FluxFrame worker from blockchain-based polling to AP
 ### Architecture Shift
 
 **Before (main.py)**:
+
 ```
 Worker → StarkNet RPC → Job Registry Contract
 Worker → Check jobs on-chain
@@ -33,6 +36,7 @@ Worker → Submit results via blockchain transaction
 ```
 
 **After (main_api.py)**:
+
 ```
 Worker → Backend API → Database + Blockchain
 Worker → Authenticate with JWT
@@ -44,6 +48,7 @@ Worker → POST /api/v1/jobs/{id}/complete
 ### New Components
 
 #### 1. WorkerAuthenticator Class
+
 ```python
 class WorkerAuthenticator:
     - authenticate() - Get JWT token from backend
@@ -53,6 +58,7 @@ class WorkerAuthenticator:
 ```
 
 #### 2. API Functions
+
 ```python
 - poll_available_jobs() - GET /api/v1/jobs/available
 - claim_job() - POST /api/v1/jobs/{id}/assign
@@ -60,7 +66,9 @@ class WorkerAuthenticator:
 ```
 
 #### 3. Preserved Functions
+
 All rendering logic was kept intact:
+
 - `IPFSClient` - IPFS operations with HTTP fallback
 - `download_blend_file()` - Download and extract .blend from IPFS
 - `validate_blend_file()` - Validate Blender can open file
@@ -71,6 +79,7 @@ All rendering logic was kept intact:
 ### Environment Variables
 
 New variables added:
+
 ```bash
 BACKEND_API_URL=http://localhost:8000/api/v1
 WORKER_ADDRESS=0x1234567890abcdef1234567890abcdef12345678
@@ -79,6 +88,7 @@ POLL_INTERVAL=10
 ```
 
 Removed (no longer needed):
+
 ```bash
 STARKNET_RPC
 JOB_REGISTRY_ADDRESS
@@ -87,6 +97,7 @@ JOB_REGISTRY_ADDRESS
 ### Main Loop Comparison
 
 **Old Flow**:
+
 ```python
 1. Connect to StarkNet RPC
 2. Create contract instance
@@ -97,6 +108,7 @@ JOB_REGISTRY_ADDRESS
 ```
 
 **New Flow**:
+
 ```python
 1. Authenticate with backend API
 2. Initialize IPFS client
@@ -110,26 +122,31 @@ JOB_REGISTRY_ADDRESS
 ## Benefits
 
 ### 1. Reduced Blockchain Load
+
 - Backend batches transactions
 - Worker doesn't need to maintain RPC connection
 - Lower gas costs from optimized contract calls
 
 ### 2. Better Error Handling
+
 - API returns structured error messages
 - JWT expiry handled automatically
 - Failed jobs don't require blockchain cleanup
 
 ### 3. Centralized State Management
+
 - Backend tracks job states in database
 - Consistent view across all workers
 - Prevents race conditions on job claiming
 
 ### 4. Improved Security
+
 - Worker authentication with challenge/signature
 - JWT tokens with expiry
 - Backend validates worker eligibility
 
 ### 5. Easier Monitoring
+
 - Backend can track worker health
 - API logs all worker actions
 - Performance metrics collection
@@ -151,12 +168,14 @@ To test the new worker:
 ## Migration Path
 
 ### For Development
+
 1. Keep old worker as backup
 2. Run new worker with `python src/main_api.py`
 3. Monitor for issues
 4. Switch fully once validated
 
 ### For Production
+
 1. Deploy backend API first
 2. Test API endpoints manually
 3. Deploy new worker to staging
@@ -173,6 +192,7 @@ To test the new worker:
 ## Future Enhancements
 
 Potential improvements:
+
 1. Real StarkNet signature implementation
 2. WebSocket connection for real-time job notifications
 3. Parallel job processing (multiple Blender instances)
@@ -183,6 +203,7 @@ Potential improvements:
 ## Files Unchanged
 
 These files were not modified:
+
 - `worker/requirements.txt` - No new dependencies needed
 - `worker/dockerfile` - Works with both versions
 - `worker/src/main.py` - Original worker preserved
@@ -190,18 +211,21 @@ These files were not modified:
 ## Command Reference
 
 ### Run New Worker
+
 ```bash
 cd worker
 python src/main_api.py
 ```
 
 ### Run Old Worker (deprecated)
+
 ```bash
 cd worker
 python src/main.py
 ```
 
 ### Test Backend API
+
 ```bash
 # Check health
 curl http://localhost:8000/health
@@ -212,6 +236,7 @@ curl -H "Authorization: Bearer <token>" \
 ```
 
 ### Test IPFS
+
 ```bash
 # Check IPFS node
 ipfs id
@@ -221,6 +246,7 @@ ipfs get <CID>
 ```
 
 ### Test Blender
+
 ```bash
 # Check version
 blender --version
@@ -232,21 +258,27 @@ blender -b scene.blend -f 1
 ## Questions & Answers
 
 ### Q: Can I still use the old worker?
+
 **A:** Yes, `main.py` is unchanged and fully functional.
 
 ### Q: Do I need to change anything in the frontend?
+
 **A:** No, frontend uses the backend API, which works with both worker versions.
 
 ### Q: What if authentication fails?
+
 **A:** Worker will log error and exit. Check `WORKER_ADDRESS` and backend logs.
 
 ### Q: How do I know if a job is processing?
+
 **A:** Check worker logs for "Successfully claimed job {id}" message.
 
 ### Q: Can multiple workers run simultaneously?
+
 **A:** Yes, backend handles job assignment to prevent conflicts.
 
 ### Q: Is this faster than the old worker?
+
 **A:** Slightly faster polling, same rendering time. Main benefit is reliability.
 
 ## Summary
@@ -255,6 +287,6 @@ blender -b scene.blend -f 1
 ✅ **Preserved**: All rendering logic from original worker  
 ✅ **Documented**: Comprehensive README and configuration guide  
 ✅ **Tested**: Ready for local development testing  
-🎯 **Next**: Test with real jobs and verify end-to-end flow  
+🎯 **Next**: Test with real jobs and verify end-to-end flow
 
 The refactoring is complete and ready for testing!
