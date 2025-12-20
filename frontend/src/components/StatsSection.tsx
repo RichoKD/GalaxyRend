@@ -8,7 +8,7 @@ import React from "react";
 import { cn } from "@/lib/utils";
 
 const css = `
-.fluxframe-bg {
+.galaxyrend-bg {
     background: radial-gradient(circle at 50% 0%, rgba(74, 144, 226, 0.15) 0%, transparent 50%),
                 linear-gradient(135deg, rgba(46, 210, 201, 0.02) 25%, transparent 25.5%, transparent 50%, rgba(46, 210, 201, 0.02) 50.5%, rgba(46, 210, 201, 0.02) 75%, transparent 75.5%, transparent);
     background-size: 800px 400px, 12px 12px;
@@ -100,7 +100,7 @@ const BarChart = ({
 
   return (
     <div className="group relative h-full w-full">
-      <div className="fluxframe-bg relative h-full w-full overflow-hidden rounded-3xl hover:border-cyan-400/20 transition-all duration-300">
+      <div className="galaxyrend-bg relative h-full w-full overflow-hidden rounded-3xl hover:border-cyan-400/20 transition-all duration-300">
         <motion.div
           initial={{ opacity: 0, y: 100, height: 0 }}
           animate={{ opacity: 1, y: 0, height: `${percentage}%` }}

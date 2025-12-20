@@ -1,6 +1,6 @@
 # Authentication Implementation Guide
 
-This document explains the authentication workflow implemented in the FluxFrame frontend.
+This document explains the authentication workflow implemented in the GalaxyRend frontend.
 
 ## Overview
 

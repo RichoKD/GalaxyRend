@@ -31,7 +31,7 @@ export default function HeroSection() {
                 >
                   <Image
                     src="/logo.png"
-                    alt="FluxFrame Logo"
+                    alt="GalaxyRend Logo"
                     width={160}
                     height={60}
                     priority

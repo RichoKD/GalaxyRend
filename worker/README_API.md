@@ -5,11 +5,13 @@ This worker connects to the GalaxyRend backend API to receive and process render
 ## Architecture Overview
 
 ### Old Approach (main.py)
+
 - Polls blockchain directly for jobs
 - Checks job eligibility and worker registration on-chain
 - Submits results via blockchain transactions
 
 ### New Approach (main_api.py) ✨
+
 - Authenticates with backend API using wallet signature
 - Polls `/api/v1/jobs/available` for pending jobs
 - Claims jobs via `POST /api/v1/jobs/{id}/assign`
@@ -27,6 +29,7 @@ This worker connects to the GalaxyRend backend API to receive and process render
 ## How it Works
 
 ### 1. Authentication
+
 ```
 Worker → POST /api/v1/auth/challenge {address}
 Backend → {challenge}
@@ -36,6 +39,7 @@ Backend → {access_token, worker}
 ```
 
 ### 2. Job Discovery
+
 ```
 Worker → GET /api/v1/jobs/available?status=pending
 Backend → [{id, asset_cid, reward, creator, ...}]
@@ -43,6 +47,7 @@ Worker → Filters out already completed jobs
 ```
 
 ### 3. Job Claiming
+
 ```
 Worker → POST /api/v1/jobs/{id}/assign {worker_address}
 Backend → Updates job status to "in_progress"
@@ -50,6 +55,7 @@ Backend → Returns success confirmation
 ```
 
 ### 4. Job Processing
+
 1. **Download**: Downloads .blend file from IPFS using asset_cid
 2. **Validate**: Checks if Blender can open the file
 3. **Render**: Uses Blender EEVEE engine to render frame 1
@@ -57,6 +63,7 @@ Backend → Returns success confirmation
 5. **Complete**: Returns result_cid
 
 ### 5. Result Submission
+
 ```
 Worker → POST /api/v1/jobs/{id}/complete {result_cid}
 Backend → Updates job status to "completed"
@@ -91,6 +98,7 @@ POLL_INTERVAL=10  # seconds between job polls
 ## Requirements
 
 ### System Dependencies
+
 - **Blender** - For rendering 3D scenes
 - **Python 3.11+** - Runtime environment
 - **IPFS node** - For downloading/uploading files
@@ -98,11 +106,13 @@ POLL_INTERVAL=10  # seconds between job polls
 ### Python Dependencies
 
 Install via pip:
+
 ```bash
 pip install -r requirements.txt
 ```
 
 Key packages:
+
 - `requests` - HTTP client for API communication
 - `python-dotenv` - Environment variable management
 - `ipfshttpclient` - IPFS operations (optional, has HTTP fallback)
@@ -112,6 +122,7 @@ Key packages:
 ### 1. Setup Environment
 
 Copy the example env file and configure it:
+
 ```bash
 cd worker
 cp .env.example .env
@@ -121,11 +132,13 @@ cp .env.example .env
 ### 2. Run the Worker
 
 Using the new API-based worker:
+
 ```bash
 python src/main_api.py
 ```
 
 Using the old blockchain-based worker (deprecated):
+
 ```bash
 python src/main.py
 ```
@@ -159,24 +172,26 @@ python src/main.py
 
 ## API Endpoints Used
 
-| Endpoint | Method | Purpose |
-|----------|--------|---------|
-| `/auth/challenge` | POST | Get authentication challenge |
-| `/auth/worker-auth` | POST | Submit signature and get JWT token (for workers) |
-| `/jobs/available` | GET | Get list of pending jobs |
-| `/jobs/{id}/assign` | POST | Claim a job for this worker |
-| `/jobs/{id}/complete` | POST | Submit completed job result |
+| Endpoint              | Method | Purpose                                          |
+| --------------------- | ------ | ------------------------------------------------ |
+| `/auth/challenge`     | POST   | Get authentication challenge                     |
+| `/auth/worker-auth`   | POST   | Submit signature and get JWT token (for workers) |
+| `/jobs/available`     | GET    | Get list of pending jobs                         |
+| `/jobs/{id}/assign`   | POST   | Claim a job for this worker                      |
+| `/jobs/{id}/complete` | POST   | Submit completed job result                      |
 
 ## Error Handling
 
 The worker handles several error scenarios:
 
 ### Authentication Failures
+
 - Retries authentication on token expiry
 - Logs detailed error messages
 - Exits if authentication repeatedly fails
 
 ### Job Processing Errors
+
 - **Download Failed**: Skips job, logs error, continues polling
 - **Validation Failed**: Skips job (invalid .blend file)
 - **Render Failed**: Logs error, skips job
@@ -184,6 +199,7 @@ The worker handles several error scenarios:
 - **Submission Failed**: Retries submission, then moves to next job
 
 ### Network Errors
+
 - Retries API calls with exponential backoff
 - Falls back to IPFS gateway if API fails
 - Continues polling even after network errors
@@ -195,6 +211,7 @@ The worker maintains a local JSON file to track completed jobs:
 **Location**: `worker/src/temp/completed_jobs.json`
 
 **Format**:
+
 ```json
 {
   "completed_jobs": [1, 2, 5, 8, 13]
@@ -206,12 +223,14 @@ This prevents re-processing jobs after worker restart.
 ## Development vs Production
 
 ### Development Mode
+
 - Uses local backend at `http://localhost:8000`
 - Uses local IPFS node at `127.0.0.1:5001`
 - Mock signatures for testing
 - Verbose logging
 
 ### Production Mode
+
 - Backend API URL from environment
 - Remote IPFS nodes or Pinata/Infura
 - Real StarkNet wallet signatures
@@ -230,25 +249,30 @@ Monitor worker health by checking:
 ## Troubleshooting
 
 ### "Authentication failed"
+
 - Check `WORKER_ADDRESS` matches a registered worker
 - Verify `BACKEND_API_URL` is correct
 - Ensure backend is running and accessible
 
 ### "No available jobs"
+
 - No jobs are pending in the system
 - Worker may not meet job requirements (reputation)
 - Jobs may be claimed by other workers
 
 ### "Blender not found"
+
 - Install Blender or update `BLENDER_PATH`
 - Test: `blender --version`
 
 ### "IPFS download failed"
+
 - Check IPFS node is running: `ipfs id`
 - Verify `IPFS_API` configuration
 - Try accessing IPFS gateway in browser
 
 ### "Render timeout"
+
 - Complex scenes may exceed 300s limit
 - Increase timeout in `render_blend_file()`
 - Consider using faster render engine

@@ -1,16 +1,16 @@
-# FluxFrame Frontend
+# GalaxyRend Frontend
 
-This is the frontend for [FluxFrame](https://fluxframe.xyz) - a decentralized work platform built on Starknet where Creators post jobs, Nodes deliver excellence, and AI ensures quality.
+This is the frontend for [GalaxyRend](https://galaxyrend.xyz) - a decentralized work platform built on Starknet where Creators post jobs, Nodes deliver excellence, and AI ensures quality.
 
-## About FluxFrame
+## About GalaxyRend
 
-FluxFrame is a revolutionary platform that connects creators with skilled nodes in a decentralized ecosystem. Built on Starknet, it provides:
+GalaxyRend is a revolutionary platform that connects creators with skilled nodes in a decentralized ecosystem. Built on Starknet, it provides:
 
 - **For Creators**: Post jobs, manage submissions, and release rewards with confidence
 - **For Nodes**: Find jobs, submit quality work, and earn rewards in crypto
 - **For Admins**: Oversee the ecosystem, resolve disputes, and ensure fairness## Project Overview
 
-FluxFrame Frontend is a Next.js 15 application with React 19 that provides a modern, responsive user interface for the decentralized work platform. The application features a cosmic dark theme design and seamless integration with Starknet blockchain technology.
+GalaxyRend Frontend is a Next.js 15 application with React 19 that provides a modern, responsive user interface for the decentralized work platform. The application features a cosmic dark theme design and seamless integration with Starknet blockchain technology.
 
 ### Tech Stack
 
@@ -18,7 +18,7 @@ FluxFrame Frontend is a Next.js 15 application with React 19 that provides a mod
 - **Runtime**: React 19.1.1
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS 4 with custom design system
-- **UI Components**: Radix UI primitives + Custom FluxFrame components
+- **UI Components**: Radix UI primitives + Custom GalaxyRend components
 - **Icons**: Tabler Icons React, Lucide React
 - **Animation**: Framer Motion for smooth interactions
 - **Forms**: React Hook Form with Zod validation
@@ -58,7 +58,7 @@ src/
 ├── components/            # Reusable UI components
 │   ├── ui/               # Base UI components (Radix + custom)
 │   ├── magicui/          # Specialized UI components
-│   └── [Feature Components] # FluxFrame page-specific components
+│   └── [Feature Components] # GalaxyRend page-specific components
 └── lib/                  # Utility functions and configurations
     └── utils.ts          # Common utility functions
 ```
@@ -71,15 +71,15 @@ The root layout component that wraps all pages and provides:
 
 - **Font Configuration**: Geist Sans and Geist Mono fonts with CSS variables
 - **Global Styling**: Dark theme applied by default with cosmic design system
-- **Metadata**: FluxFrame branding ("FluxFrame - Decentralized Work Platform")
+- **Metadata**: GalaxyRend branding ("GalaxyRend - Decentralized Work Platform")
 - **Error Handling**: ErrorReporter component for graceful error handling
 - **External Scripts**: Route messaging script for iframe communication
 
-### FluxFrame Components
+### GalaxyRend Components
 
 #### HeroSection (`src/components/HeroSection.tsx`)
 
-- Main landing area with FluxFrame branding and navigation
+- Main landing area with GalaxyRend branding and navigation
 - Hero content: "Decentralized Work, Verified Results"
 - Connect Wallet and Learn More CTAs
 - Role-based cards for Creators, Nodes, and Admins
@@ -87,12 +87,12 @@ The root layout component that wraps all pages and provides:
 
 #### BentoGrid (`src/components/BentoGrid.tsx`)
 
-- Grid layout system for FluxFrame feature showcase
+- Grid layout system for GalaxyRend feature showcase
 - Responsive design for different screen sizes
 
 #### IntegrationSection (`src/components/IntegrationSection.tsx`)
 
-- Highlights FluxFrame's blockchain integrations
+- Highlights GalaxyRend's blockchain integrations
 - Focus on Starknet technology and smart contracts
 
 #### TestimonialSection (`src/components/TestimonialSection.tsx`)
@@ -102,7 +102,7 @@ The root layout component that wraps all pages and provides:
 
 #### FooterSection (`src/components/Footer.tsx`)
 
-- FluxFrame branding and platform navigation
+- GalaxyRend branding and platform navigation
 - Newsletter subscription
 - Links for Nodes, Creators, Admins, Browse Jobs
 - Social media integration and legal links
@@ -119,11 +119,11 @@ A comprehensive error reporting system that:
 
 ### UI Component System
 
-FluxFrame uses a comprehensive UI component library:
+GalaxyRend uses a comprehensive UI component library:
 
 #### Base Components (`src/components/ui/`)
 
-Radix UI primitives with custom FluxFrame styling including:
+Radix UI primitives with custom GalaxyRend styling including:
 
 - `accordion`, `alert`, `aspect-ratio`, `avatar`, `badge`
 - `breadcrumb`, `button`, `card`, `carousel`, `checkbox`
@@ -134,7 +134,7 @@ Radix UI primitives with custom FluxFrame styling including:
 
 - **Marquee**: Animated scrolling text component for testimonials
 
-#### FluxFrame Feature Components
+#### GalaxyRend Feature Components
 
 - **HeroSection**: Main landing area with platform messaging
 - **BentoGrid**: Grid layout for feature showcase
@@ -142,11 +142,11 @@ Radix UI primitives with custom FluxFrame styling including:
 - **TestimonialSection**: User testimonials and social proof
 - **FooterSection**: Platform navigation and branding
 
-## FluxFrame Application Flow
+## GalaxyRend Application Flow
 
 ### Current Page Structure
 
-The FluxFrame homepage (`src/app/page.tsx`) renders components in this order:
+The GalaxyRend homepage (`src/app/page.tsx`) renders components in this order:
 
 ```typescript
 export default function Home() {
@@ -164,21 +164,21 @@ export default function Home() {
 
 ### User Journey Flow
 
-1. **Landing**: Users see hero section with FluxFrame branding
+1. **Landing**: Users see hero section with GalaxyRend branding
 2. **Value Proposition**: "Decentralized Work, Verified Results" messaging
 3. **Role Selection**: Cards for Creators, Nodes, and Admins
 4. **Feature Discovery**: BentoGrid showcases platform capabilities
 5. **Trust Building**: Integration highlights and testimonials
 6. **Action**: Connect Wallet CTAs throughout the experience
 
-## FluxFrame Styling System
+## GalaxyRend Styling System
 
-The application uses a sophisticated Tailwind CSS setup with FluxFrame branding:
+The application uses a sophisticated Tailwind CSS setup with GalaxyRend branding:
 
 ### Design System
 
 - **Theme**: Dark mode applied by default for cosmic feel
-- **Colors**: Blue and cyan gradients for FluxFrame branding
+- **Colors**: Blue and cyan gradients for GalaxyRend branding
 - **Typography**: Geist Sans and Mono fonts with CSS variables
 - **Components**: Consistent design patterns across all UI elements
 
@@ -192,7 +192,7 @@ The application uses a sophisticated Tailwind CSS setup with FluxFrame branding:
 
 ### Tailwind Configuration
 
-- **Custom Colors**: FluxFrame brand-specific color palette
+- **Custom Colors**: GalaxyRend brand-specific color palette
 - **Dark Mode**: Default dark theme with cosmic design elements
 - **Responsive Design**: Mobile-first responsive utilities
 - **Component Variants**: Using `class-variance-authority` for component variants
@@ -258,7 +258,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/bui
 ### Component Development
 
 ```typescript
-// Example FluxFrame component pattern
+// Example GalaxyRend component pattern
 import { ComponentProps } from "./types";
 import { cn } from "@/lib/utils";
 
@@ -274,14 +274,14 @@ export function MyComponent({ className, ...props }: ComponentProps) {
 ### Best Practices
 
 1. **Use Existing Components**: Check `src/components/ui/` first
-2. **Follow Design System**: Maintain FluxFrame branding consistency
+2. **Follow Design System**: Maintain GalaxyRend branding consistency
 3. **Responsive Design**: Use Tailwind responsive prefixes
 4. **Accessibility**: Leverage Radix UI components for a11y
 5. **Performance**: Optimize images and use Next.js features
 
 ## Project Status
 
-- ✅ **FluxFrame Branding**: Custom platform design and messaging
+- ✅ **GalaxyRend Branding**: Custom platform design and messaging
 - ✅ **Dark Theme**: Cosmic design system implemented
 - ✅ **Component Library**: Comprehensive UI components available
 - ✅ **Responsive Design**: Mobile-first approach
@@ -290,4 +290,4 @@ export function MyComponent({ className, ...props }: ComponentProps) {
 - 🚧 **Starknet Integration**: Ready for wallet connection features
 - 🚧 **API Integration**: Prepared for backend connectivity
 
-This FluxFrame frontend provides a solid foundation for the decentralized work platform with modern development practices and an engaging user experience.
+This GalaxyRend frontend provides a solid foundation for the decentralized work platform with modern development practices and an engaging user experience.

@@ -69,7 +69,7 @@ const IntegrationSection = () => {
           </h2>
 
           <p className="text-lg md:text-xl text-muted-foreground/80 leading-relaxed max-w-2xl mx-auto">
-            Power up your workflow with FluxFrame's decentralized ecosystem.
+            Power up your workflow with GalaxyRend's decentralized ecosystem.
             <br className="hidden md:block" />
             Connect wallets and blockchain services securely in clicks.
           </p>
@@ -170,7 +170,7 @@ const IntegrationSection = () => {
         <div className="text-center mt-20">
           <div className="inline-flex items-center gap-6 px-10 py-6 rounded-3xl bg-gradient-to-r from-blue-500/20 via-cyan-500/15 to-purple-500/20 backdrop-blur-2xl border border-blue-400/30 shadow-2xl shadow-blue-500/10 hover:shadow-cyan-400/20 transition-all duration-500">
             <span className="text-base font-semibold bg-gradient-to-r from-foreground to-cyan-300 bg-clip-text text-transparent">
-              Join teams already using FluxFrame
+              Join teams already using GalaxyRend
             </span>
             <div className="flex -space-x-3">
               {["Alice", "Bob", "Carol", "David"].map((seed, i) => (
