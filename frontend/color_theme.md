@@ -1,4 +1,4 @@
-# FluxFrame Color Palette
+# GalaxyRend Color Palette
 
 ## Primary Colors
 

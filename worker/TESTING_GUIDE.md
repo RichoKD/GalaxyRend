@@ -106,7 +106,7 @@ def test_ipfs():
     # Test upload
     test_file = "test.txt"
     with open(test_file, 'w') as f:
-        f.write("Hello, FluxFrame!")
+        f.write("Hello, GalaxyRend!")
     
     result = ipfs.add(test_file)
     cid = result["Hash"]

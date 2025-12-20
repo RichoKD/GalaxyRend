@@ -1,6 +1,6 @@
-# FluxFrame Tool Versions
+# GalaxyRend Tool Versions
 
-This document lists all the tools and their versions used in the FluxFrame project.
+This document lists all the tools and their versions used in the GalaxyRend project.
 
 ## Core Development Tools
 
@@ -134,4 +134,4 @@ sudo apt install blender
 ---
 
 **Last Updated**: August 23, 2025  
-**Project Version**: FluxFrame v0.2.0
+**Project Version**: GalaxyRend v0.2.0

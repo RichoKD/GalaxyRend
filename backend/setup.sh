@@ -1,10 +1,10 @@
 #!/bin/bash
 
-# FluxFrame Backend Setup Script
+# GalaxyRend Backend Setup Script
 
 set -e
 
-echo "🚀 Setting up FluxFrame Backend..."
+echo "🚀 Setting up GalaxyRend Backend..."
 
 # Get the directory of the script
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -90,4 +90,4 @@ if command -v redis-cli &> /dev/null; then
 fi
 
 echo ""
-echo "🎉 FluxFrame Backend is ready!"
+echo "🎉 GalaxyRend Backend is ready!"

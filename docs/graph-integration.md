@@ -1,10 +1,10 @@
-# The Graph Integration Guide for FluxFrame
+# The Graph Integration Guide for GalaxyRend
 
-This guide explains how to integrate The Graph Protocol into your FluxFrame workflow for efficient blockchain data indexing and querying.
+This guide explains how to integrate The Graph Protocol into your GalaxyRend workflow for efficient blockchain data indexing and querying.
 
 ## Overview
 
-FluxFrame supports three approaches for blockchain data access:
+GalaxyRend supports three approaches for blockchain data access:
 
 1. **Direct Event Indexing** - FastAPI backend directly indexes contract events
 2. **The Graph Only** - Use The Graph Protocol for all data queries
@@ -29,7 +29,7 @@ npm run deploy-local
 
 # 3. Configure backend to use Graph
 echo "USE_GRAPH=true" >> backend/.env
-echo "GRAPH_ENDPOINT=http://localhost:8000/subgraphs/name/fluxframe/fluxframe-subgraph" >> backend/.env
+echo "GRAPH_ENDPOINT=http://localhost:8000/subgraphs/name/galaxyrend/galaxyrend-subgraph" >> backend/.env
 echo "ENABLE_EVENT_INDEXING=false" >> backend/.env
 ```
 
@@ -76,7 +76,7 @@ cd subgraph
 npm run deploy
 
 # 3. Update backend config
-echo "GRAPH_ENDPOINT=https://api.thegraph.com/subgraphs/name/YOUR_USERNAME/fluxframe-subgraph" >> backend/.env
+echo "GRAPH_ENDPOINT=https://api.thegraph.com/subgraphs/name/YOUR_USERNAME/galaxyrend-subgraph" >> backend/.env
 ```
 
 ## API Usage Patterns
@@ -159,7 +159,7 @@ async def custom_query():
 ```env
 # The Graph settings
 USE_GRAPH=true
-GRAPH_ENDPOINT=http://localhost:8000/subgraphs/name/fluxframe/fluxframe-subgraph
+GRAPH_ENDPOINT=http://localhost:8000/subgraphs/name/galaxyrend/galaxyrend-subgraph
 ENABLE_EVENT_INDEXING=true  # Keep as fallback
 
 # Contract settings (for both approaches)
@@ -234,7 +234,7 @@ If issues arise with The Graph:
 echo "USE_GRAPH=false" >> backend/.env
 
 # 2. Restart backend
-systemctl restart fluxframe-backend
+systemctl restart galaxyrend-backend
 
 # 3. Database continues serving requests
 # No data loss - seamless fallback

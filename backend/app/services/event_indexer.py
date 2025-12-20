@@ -166,6 +166,12 @@ class EventIndexer:
                 await self._process_job_assigned(event_data, db)
             elif event_name == "JobCompleted":
                 await self._process_job_completed(event_data, db)
+            elif event_name == "JobFinalized":
+                await self._process_job_finalized(event_data, db)
+            elif event_name == "JobCancelled":
+                await self._process_job_cancelled(event_data, db)
+            elif event_name == "WorkApproved":
+                await self._process_work_approved(event_data, db)
             elif event_name == "ReputationUpdated":
                 await self._process_reputation_updated(event_data, contract_event, db)
             
@@ -228,7 +234,7 @@ class EventIndexer:
         """Process JobCreated event"""
         try:
             job_id = int(event_data[0])
-            creator_address = event_data[1]
+            # creator_address = event_data[1]
             reward = int(event_data[2])
             deadline = int(event_data[3])  # Timestamp
             
@@ -286,10 +292,20 @@ class EventIndexer:
             logger.error(f"Failed to process job assignment: {e}")
     
     async def _process_job_completed(self, event_data: list, db: AsyncSession):
-        """Process JobCompleted event"""
+        """Process JobCompleted event (Legacy/Optional)"""
         try:
             job_id = int(event_data[0])
-            quality_score = int(event_data[1])
+            # ... kept for backward compatibility if needed
+            logger.info(f"Processing JobCompleted for {job_id}")
+        except Exception as e:
+            logger.error(f"Failed to process job completion: {e}")
+
+    async def _process_job_finalized(self, event_data: list, db: AsyncSession):
+        """Process JobFinalized event"""
+        try:
+            job_id = int(event_data[0])
+            worker_address = event_data[1]
+            reward_amount = int(event_data[2])
             
             # Update job
             query = select(Job).where(Job.chain_job_id == job_id)
@@ -297,35 +313,59 @@ class EventIndexer:
             job = result.scalar_one_or_none()
             
             if job:
-                # Get full job details from contract
-                job_info = await self.starknet_client.get_job_info(job_id)
-                if job_info:
-                    full_result_cid = job_info["result_cid_part1"]
-                    if job_info["result_cid_part2"]:
-                        full_result_cid += job_info["result_cid_part2"]
-                    
-                    job.result_cid_part1 = job_info["result_cid_part1"]
-                    job.result_cid_part2 = job_info["result_cid_part2"]
-                    job.full_result_cid = full_result_cid
-                    job.quality_score = quality_score
-                    job.status = "completed"
-                    job.completed_at = datetime.utcnow()
-                    
-                    # Update worker stats
-                    if job.worker_id:
-                        worker_query = select(Worker).where(Worker.id == job.worker_id)
-                        worker_result = await db.execute(worker_query)
-                        worker = worker_result.scalar_one_or_none()
-                        
-                        if worker:
-                            worker.jobs_completed += 1
-                            worker.total_earnings += job.reward_amount
-                            worker.last_seen = datetime.utcnow()
-                    
-                    logger.info(f"Job {job_id} completed with quality score {quality_score}")
-            
+                job.status = "completed"
+                job.completed_at = datetime.utcnow()
+                
+                # Update worker stats
+                query_worker = select(Worker).where(Worker.address == worker_address)
+                result_worker = await db.execute(query_worker)
+                worker = result_worker.scalar_one_or_none()
+                
+                if worker:
+                    worker.jobs_completed += 1
+                    worker.total_earnings += reward_amount
+                
+                logger.info(f"Job {job_id} finalized")
+                
         except Exception as e:
-            logger.error(f"Failed to process job completion: {e}")
+            logger.error(f"Failed to process job finalization: {e}")
+
+    async def _process_job_cancelled(self, event_data: list, db: AsyncSession):
+        """Process JobCancelled event"""
+        try:
+            job_id = int(event_data[0])
+            # refund_amount = int(event_data[2])
+            
+            query = select(Job).where(Job.chain_job_id == job_id)
+            result = await db.execute(query)
+            job = result.scalar_one_or_none()
+            
+            if job:
+                job.status = "cancelled"
+                job.completed_at = datetime.utcnow() # Using completed_at for cancellation time
+                logger.info(f"Job {job_id} cancelled")
+                
+        except Exception as e:
+            logger.error(f"Failed to process job cancellation: {e}")
+
+    async def _process_work_approved(self, event_data: list, db: AsyncSession):
+        """Process WorkApproved event"""
+        try:
+            job_id = int(event_data[0])
+            worker_address = event_data[1]
+            approver_address = event_data[2]
+            
+            query = select(Job).where(Job.chain_job_id == job_id)
+            result = await db.execute(query)
+            job = result.scalar_one_or_none()
+            
+            if job:
+                job.status = "completed" # Approved work is completed
+                job.quality_score = 100 # Default to max score since it was manually approved? Or leave None.
+                logger.info(f"Job {job_id} work approved by {approver_address}")
+                
+        except Exception as e:
+            logger.error(f"Failed to process work approval: {e}")
     
     async def _process_reputation_updated(self, event_data: list, contract_event: ContractEvent, db: AsyncSession):
         """Process ReputationUpdated event"""

@@ -2,7 +2,7 @@
 
 ## Overview
 
-The FluxFrame Worker Authorization and Reputation System provides a comprehensive framework for verifying worker nodes and tracking their performance through a reputation-based scoring mechanism. This system ensures quality control and incentivizes good performance while providing protection against malicious actors.
+The GalaxyRend Worker Authorization and Reputation System provides a comprehensive framework for verifying worker nodes and tracking their performance through a reputation-based scoring mechanism. This system ensures quality control and incentivizes good performance while providing protection against malicious actors.
 
 ## Features
 

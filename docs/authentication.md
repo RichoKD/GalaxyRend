@@ -1,8 +1,8 @@
-# FluxFrame Authentication System
+# GalaxyRend Authentication System
 
 ## Overview
 
-The FluxFrame authentication system provides secure, decentralized authentication using StarkNet wallet signatures and JWT tokens. This implementation supports worker registration, verification, and role-based access control.
+The GalaxyRend authentication system provides secure, decentralized authentication using StarkNet wallet signatures and JWT tokens. This implementation supports worker registration, verification, and role-based access control.
 
 ## Architecture
 
@@ -47,7 +47,7 @@ Content-Type: application/json
 **Response:**
 ```json
 {
-  "message": "FluxFrame Authentication\\nAddress: 0x1234...\\nTimestamp: 1693834567\\nNonce: abc123...",
+  "message": "GalaxyRend Authentication\\nAddress: 0x1234...\\nTimestamp: 1693834567\\nNonce: abc123...",
   "timestamp": "1693834567",
   "nonce": "abc123def456",
   "expires_at": "1693834867"
@@ -64,7 +64,7 @@ Content-Type: application/json
 
 {
   "address": "0x1234567890abcdef...",
-  "message": "FluxFrame Authentication\\n...",
+  "message": "GalaxyRend Authentication\\n...",
   "signature": ["0x1a2b3c...", "0x4d5e6f..."],
   "timestamp": 1693834567
 }

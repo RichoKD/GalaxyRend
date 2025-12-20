@@ -50,8 +50,8 @@ class GraphQLClient:
             logger.error(f"GraphQL query failed: {e}")
             raise
 
-class FluxFrameGraphClient:
-    """High-level client for FluxFrame subgraph queries"""
+class GalaxyRendGraphClient:
+    """High-level client for GalaxyRend subgraph queries"""
     
     def __init__(self):
         self.client = GraphQLClient()
@@ -343,9 +343,9 @@ class FluxFrameGraphClient:
 # Global client instance
 _graph_client = None
 
-async def get_graph_client() -> FluxFrameGraphClient:
-    """Get or create FluxFrame Graph client instance"""
+async def get_graph_client() -> GalaxyRendGraphClient:
+    """Get or create GalaxyRend Graph client instance"""
     global _graph_client
     if _graph_client is None:
-        _graph_client = FluxFrameGraphClient()
+        _graph_client = GalaxyRendGraphClient()
     return _graph_client

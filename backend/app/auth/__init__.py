@@ -1,1 +1,1 @@
-"""Authentication module for FluxFrame backend."""
+"""Authentication module for GalaxyRend backend."""

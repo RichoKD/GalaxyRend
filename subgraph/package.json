@@ -1,14 +1,14 @@
 {
-  "name": "fluxframe-subgraph",
+  "name": "galaxyrend-subgraph",
   "version": "1.0.0",
-  "description": "The Graph subgraph for FluxFrame decentralized computing platform",
+  "description": "The Graph subgraph for GalaxyRend decentralized computing platform",
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ fluxframe/fluxframe-subgraph",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 fluxframe/fluxframe-subgraph",
-    "create-local": "graph create --node http://localhost:8020/ fluxframe/fluxframe-subgraph",
-    "remove-local": "graph remove --node http://localhost:8020/ fluxframe/fluxframe-subgraph",
+    "deploy": "graph deploy --node https://api.thegraph.com/deploy/ galaxyrend/galaxyrend-subgraph",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 galaxyrend/galaxyrend-subgraph",
+    "create-local": "graph create --node http://localhost:8020/ galaxyrend/galaxyrend-subgraph",
+    "remove-local": "graph remove --node http://localhost:8020/ galaxyrend/galaxyrend-subgraph",
     "test": "graph test"
   },
   "dependencies": {

@@ -1,7 +1,7 @@
 services:
   # FastAPI Backend Service
   - type: web
-    name: fluxframe-backend  # Change to your preferred name
+    name: galaxyrend-backend  # Change to your preferred name
     env: python
     # pythonVersion: 3.12  # Specify your Python version
     rootDir: backend/
@@ -18,7 +18,7 @@ services:
         value: "development"  # or "production" 
       - key: DATABASE_URL
         fromDatabase:
-          name: fluxframe-db  # If using Render's Postgres
+          name: galaxyrend-db  # If using Render's Postgres
           property: connectionString
       - key: JOB_REGISTRY_ADDRESS
         value: "0x03103f3d37047b8bd0680c22a9b8d9502d5d1e34ab12259659dea2f6354ad7e8"  # From your .env
@@ -31,7 +31,7 @@ services:
 
   # Next.js Frontend Service
   - type: web
-    name: fluxframe-frontend  # Change to your preferred name
+    name: galaxyrend-frontend  # Change to your preferred name
     env: node
     # nodeVersion: '22.15.1'
     rootDir: frontend/
@@ -43,7 +43,7 @@ services:
       - key: NEXT_PUBLIC_JOB_REGISTRY_CONTRACT_ADDRESS
         value: 0x03465f9dd6f9b94daf51baacbcf1eeab963d987b24286934e3c23a1b75c9e8da
       - key: NEXT_PUBLIC_API_URL
-        value: https://fluxframe-backend.onrender.com  # Points to your backend URL
+        value: https://galaxyrend-backend.onrender.com  # Points to your backend URL
       - key: NEXT_PUBLIC_STARKNET_NETWORK
         value: sepolia  # Example; adjust as needed
     buildFilter:

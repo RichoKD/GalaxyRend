@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Post-deployment setup script for FluxFrame Job Registry with Worker Authorization
+# Post-deployment setup script for GalaxyRend Job Registry with Worker Authorization
 # Usage: ./setup_contract.sh [network] [contract_address] [token_address] [account]
 
 set -e

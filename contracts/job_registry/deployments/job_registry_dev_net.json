@@ -2,8 +2,8 @@
   "network": "dev_net",
   "account": "account-1",
   "contract_name": "JobRegistry",
-  "class_hash": "0x4ec505e1951a28899cee7257300eea0f1899c921222514516ea4181daa5fc53",
-  "contract_address": "0x0658cf5273aed253568746107f61f7a0d67fc739dda44ec084420545fa6c1759",
-  "deployed_at": "2025-11-23T11:54:38Z",
-  "abi_path": "target/dev/fluxframe_job_registry_JobRegistry.contract_class.json"
+  "class_hash": "0x22f2e12634ffdc19f3f7f4f96ea940beb6a7f811db19f39aedbd0b70a7eb9e4",
+  "contract_address": "0x0249f668cc6eeacb281b5a30890469de5b588c681fe3d505f100909b21d509f2",
+  "deployed_at": "2025-12-16T16:51:48Z",
+  "abi_path": "target/dev/galaxyrend_job_registry_JobRegistry.contract_class.json"
 }
