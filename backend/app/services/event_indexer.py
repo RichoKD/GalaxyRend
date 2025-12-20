@@ -334,7 +334,6 @@ class EventIndexer:
         """Process JobCancelled event"""
         try:
             job_id = int(event_data[0])
-            creator_address = event_data[1]
             refund_amount = int(event_data[2])
             
             query = select(Job).where(Job.chain_job_id == job_id)
