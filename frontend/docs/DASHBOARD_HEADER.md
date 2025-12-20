@@ -10,7 +10,7 @@ A reusable, responsive header component for all dashboard pages with mobile menu
 ✅ **Active link highlighting** - Current page is highlighted in blue  
 ✅ **Mobile-first design** - Optimized for all screen sizes  
 ✅ **Accessible** - ARIA labels and semantic HTML  
-✅ **Smooth transitions** - Hover effects and color changes  
+✅ **Smooth transitions** - Hover effects and color changes
 
 ## Usage
 
@@ -39,29 +39,32 @@ export default function CreatorDashboard() {
 
 #### BaseLayout Props
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `useDashboardHeader` | `boolean` | `false` | Enable the new dashboard header |
-| `dashboardRole` | `"creator" \| "node" \| "admin"` | `"creator"` | User role for navigation items |
-| `gradientVariant` | `"blue" \| "cyan" \| "purple" \| "green"` | `"blue"` | Background gradient color |
-| `showFooter` | `boolean` | `true` | Show/hide footer |
-| `showBackground` | `boolean` | `true` | Show/hide background effects |
+| Prop                 | Type                                      | Default     | Description                     |
+| -------------------- | ----------------------------------------- | ----------- | ------------------------------- |
+| `useDashboardHeader` | `boolean`                                 | `false`     | Enable the new dashboard header |
+| `dashboardRole`      | `"creator" \| "node" \| "admin"`          | `"creator"` | User role for navigation items  |
+| `gradientVariant`    | `"blue" \| "cyan" \| "purple" \| "green"` | `"blue"`    | Background gradient color       |
+| `showFooter`         | `boolean`                                 | `true`      | Show/hide footer                |
+| `showBackground`     | `boolean`                                 | `true`      | Show/hide background effects    |
 
 ### Role-Based Navigation
 
 The header automatically displays appropriate navigation items based on role:
 
 #### Creator Dashboard
+
 - Dashboard
 - My Jobs
 - Create Job
 
 #### Node Dashboard
+
 - Dashboard
 - Available Jobs
 - My Assignments
 
 #### Admin Dashboard
+
 - Dashboard
 - Users
 - All Jobs
@@ -77,9 +80,7 @@ The header automatically displays appropriate navigation items based on role:
   gradientVariant="blue"
   showFooter={true}
 >
-  <div className="py-12">
-    {/* Creator dashboard content */}
-  </div>
+  <div className="py-12">{/* Creator dashboard content */}</div>
 </BaseLayout>
 ```
 
@@ -92,9 +93,7 @@ The header automatically displays appropriate navigation items based on role:
   gradientVariant="cyan"
   showFooter={true}
 >
-  <div className="py-12">
-    {/* Node dashboard content */}
-  </div>
+  <div className="py-12">{/* Node dashboard content */}</div>
 </BaseLayout>
 ```
 
@@ -107,15 +106,14 @@ The header automatically displays appropriate navigation items based on role:
   gradientVariant="purple"
   showFooter={true}
 >
-  <div className="py-12">
-    {/* Admin dashboard content */}
-  </div>
+  <div className="py-12">{/* Admin dashboard content */}</div>
 </BaseLayout>
 ```
 
 ## Responsive Design
 
 ### Desktop (≥ 768px)
+
 - Full horizontal navigation with all menu items
 - Settings and Exit buttons visible
 - Logo on the left
@@ -123,6 +121,7 @@ The header automatically displays appropriate navigation items based on role:
 - Action buttons on right
 
 ### Mobile (< 768px)
+
 - Hamburger menu button
 - Logo on left
 - Exit button and menu toggle on right
@@ -132,6 +131,7 @@ The header automatically displays appropriate navigation items based on role:
 ## Styling
 
 ### Header Structure
+
 ```
 Fixed Header (z-50)
 ├── Semi-transparent background (bg-zinc-900/80)
@@ -140,6 +140,7 @@ Fixed Header (z-50)
 ```
 
 ### Navigation Container
+
 ```
 Responsive container
 ├── Desktop: Horizontal flex layout
@@ -148,6 +149,7 @@ Responsive container
 ```
 
 ### Interactive Elements
+
 - **Links**: Slate 300 → Blue 400 on hover
 - **Active Links**: Blue 400 color
 - **Buttons**: Smooth transitions with hover effects
@@ -159,7 +161,7 @@ Responsive container
 ✅ ARIA labels for screen readers  
 ✅ Keyboard navigation support  
 ✅ Focus states for interactive elements  
-✅ Proper link elements with href attributes  
+✅ Proper link elements with href attributes
 
 ## Customization
 

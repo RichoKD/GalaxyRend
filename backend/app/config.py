@@ -21,8 +21,8 @@ class Settings(BaseSettings):
     # StarkNet settings
     starknet_rpc_url: str = os.getenv("STARKNET_RPC_URL") or "http://localhost:5050"
     contract_address: str = os.getenv("JOB_REGISTRY_CONTRACT_ADDRESS") or "0x0315980c7693d042ed612f84cd513f1751688170cd29ed04f4eaa51ec1c26381"
-    contract_abi_path: str = "./fluxframe_job_registry_JobRegistry.contract_class.json"
-    # contract_abi_path: str = "./contracts/job_registry/target/dev/fluxframe_job_registry.contract_class.json"
+    contract_abi_path: str = "./galaxyrend_job_registry_JobRegistry.contract_class.json"
+    # contract_abi_path: str = "./contracts/job_registry/target/dev/galaxyrend_job_registry.contract_class.json"
     
     network: str = os.getenv("STARKNET_NETWORK") or "dev_net" #"devnet"
     
@@ -33,8 +33,8 @@ class Settings(BaseSettings):
 
     # The Graph settings
     use_graph: bool = not enable_event_indexing or False  # Use The Graph instead of direct indexing
-    graph_endpoint: str = os.getenv("STARKNET_GRAPHQL_URL") or "http://localhost:8000/subgraphs/name/fluxframe/fluxframe-subgraph"
-    # graph_endpoint: str = "http://localhost:8000/subgraphs/name/fluxframe/fluxframe-subgraph"
+    graph_endpoint: str = os.getenv("STARKNET_GRAPHQL_URL") or "http://localhost:8000/subgraphs/name/galaxyrend/galaxyrend-subgraph"
+    # graph_endpoint: str = "http://localhost:8000/subgraphs/name/galaxyrend/galaxyrend-subgraph"
     
     # Redis settings
     redis_url: str = os.getenv("REDIS_URL") or "redis://localhost:6379"

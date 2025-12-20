@@ -1,6 +1,6 @@
-# FluxFrame Blender Rendering Worker
+# GalaxyRend Blender Rendering Worker
 
-This worker is a Python application that polls the FluxFrame job registry smart contract for rendering jobs, downloads Blender (.blend) files from IPFS, renders them, and uploads the results back to IPFS.
+This worker is a Python application that polls the GalaxyRend job registry smart contract for rendering jobs, downloads Blender (.blend) files from IPFS, renders them, and uploads the results back to IPFS.
 
 ## How it Works
 
@@ -64,13 +64,13 @@ python src/main.py
 ### Docker
 ```bash
 # Build the image
-docker build -t fluxframe-worker .
+docker build -t galaxyrend-worker .
 
 # Run with environment variables
 docker run -e JOB_REGISTRY_ADDRESS=0x1234... \
            -e STARKNET_RPC=http://host.docker.internal:5050 \
            -e IPFS_API=/dns/ipfs-node/tcp/5001/http \
-           fluxframe-worker
+           galaxyrend-worker
 ```
 
 ## Architecture

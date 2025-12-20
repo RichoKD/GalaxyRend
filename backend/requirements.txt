@@ -1,4 +1,4 @@
-# FluxFrame Backend Dependencies
+# GalaxyRend Backend Dependencies
 fastapi==0.104.1
 uvicorn[standard]==0.24.0
 pydantic==2.5.0

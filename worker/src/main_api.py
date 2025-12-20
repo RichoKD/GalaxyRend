@@ -1,5 +1,5 @@
 """
-FluxFrame Worker - API-Based Version
+GalaxyRend Worker - API-Based Version
 Polls backend API for jobs instead of direct blockchain access
 """
 
@@ -617,7 +617,7 @@ async def process_render_job(ipfs: IPFSClient, job_id: str, asset_cid: str) -> O
 
 async def main():
     """Main worker loop"""
-    print("[Worker] Starting FluxFrame Worker (API-based)")
+    print("[Worker] Starting GalaxyRend Worker (API-based)")
     print(f"[Worker] Backend API: {BACKEND_API_URL}")
     print(f"[Worker] Worker Address: {WORKER_ADDRESS}")
     print(f"[Worker] Blender path: {BLENDER_PATH}")

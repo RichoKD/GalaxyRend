@@ -1,5 +1,5 @@
 ```
-FluxFrame/
+GalaxyRend/
 │
 ├── contracts/                     # All Cairo smart contracts
 │   ├── job_registry/               # Job registry contract (Cairo v2)

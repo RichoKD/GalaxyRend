@@ -1,6 +1,6 @@
 # GalaxyRend Worker - API-Based Architecture
 
-This worker connects to the FluxFrame backend API to receive and process rendering jobs. It replaces the direct blockchain polling approach with a more efficient API-based workflow.
+This worker connects to the GalaxyRend backend API to receive and process rendering jobs. It replaces the direct blockchain polling approach with a more efficient API-based workflow.
 
 ## Architecture Overview
 

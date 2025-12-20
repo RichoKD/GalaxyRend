@@ -1,12 +1,12 @@
-# FluxFrame
+# GalaxyRend
 
 **Decentralized Blender Rendering Platform on Starknet**
 
-FluxFrame is a blockchain-powered platform that enables users to submit Blender rendering jobs and have them processed by a distributed network of workers. Built on Starknet, it provides a trustless and verifiable way to handle 3D rendering tasks with automatic payment distribution.
+GalaxyRend is a blockchain-powered platform that enables users to submit Blender rendering jobs and have them processed by a distributed network of workers. Built on Starknet, it provides a trustless and verifiable way to handle 3D rendering tasks with automatic payment distribution.
 
 ## 🎯 Overview
 
-FluxFrame connects job creators who need Blender rendering services with workers who provide computational resources. The platform uses smart contracts to escrow payments, verify job completion, and automatically distribute rewards.
+GalaxyRend connects job creators who need Blender rendering services with workers who provide computational resources. The platform uses smart contracts to escrow payments, verify job completion, and automatically distribute rewards.
 
 ### Key Features
 
@@ -49,8 +49,8 @@ FluxFrame connects job creators who need Blender rendering services with workers
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/RichoKD/FluxFrame.git
-   cd FluxFrame
+   git clone https://github.com/RichoKD/GalaxyRend.git
+   cd GalaxyRend
    ```
 
 2. **Install dependencies (Local) or you can use docker**
@@ -207,7 +207,7 @@ python3 src/main.py
 ## 📁 Project Structure
 
 ```
-FluxFrame/
+GalaxyRend/
 ├── contracts/          # Cairo smart contracts
 │   └── job_registry/   # Main job registry contract
 ├── frontend/           # Next.js web interface
@@ -313,4 +313,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**FluxFrame v0.1.0** - Democratizing 3D rendering through blockchain technology
+**GalaxyRend v0.2.0** - Democratizing 3D rendering through blockchain technology

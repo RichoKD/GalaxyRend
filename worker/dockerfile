@@ -1,4 +1,4 @@
-# This Dockerfile sets up a Python environment for the FluxFrame worker with Blender.
+# This Dockerfile sets up a Python environment for the GalaxyRend worker with Blender.
 
 FROM python:3.11-slim
 

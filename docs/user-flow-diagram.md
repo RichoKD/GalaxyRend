@@ -1,7 +1,7 @@
-# FluxFrame User Flow Diagram
+# GalaxyRend User Flow Diagram
 
 ## Overview
-FluxFrame is a decentralized Blender rendering platform that connects job creators with workers through smart contracts on Starknet. This document outlines the complete user flows for different user types.
+GalaxyRend is a decentralized Blender rendering platform that connects job creators with workers through smart contracts on Starknet. This document outlines the complete user flows for different user types.
 
 ## System Architecture Flow
 
@@ -290,4 +290,4 @@ Worker → IPFS → Smart Contract → Frontend
 - **Frontend caching**: Reduce API calls with smart caching
 - **Worker load balancing**: Distribute jobs efficiently
 
-This user flow provides a comprehensive guide for all stakeholders interacting with the FluxFrame platform, ensuring clear understanding of processes, technical requirements, and system behavior.
+This user flow provides a comprehensive guide for all stakeholders interacting with the GalaxyRend platform, ensuring clear understanding of processes, technical requirements, and system behavior.

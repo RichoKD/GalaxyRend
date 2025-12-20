@@ -12,8 +12,7 @@ Get the new API-based worker running in 5 minutes.
 ## Setup Steps
 
 ### 1. Navigate to Worker Directory
-
-```bashGalaxyRend
+```bash
 cd /home/rico/cairo/GalaxyRend/worker
 ```
 
@@ -148,7 +147,7 @@ POLL_INTERVAL=5  # Poll every 5 seconds (faster)
 ### Use Remote Backend
 
 ```bash
-BACKEND_API_URL=https://api.fluxframe.io/api/v1
+BACKEND_API_URL=https://api.galaxyrend.io/api/v1
 ```
 
 ### Use Remote IPFS
