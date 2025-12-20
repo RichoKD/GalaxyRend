@@ -15,6 +15,20 @@ services:
     environment:
       - IPFS_API_ORIGINS=http://localhost:3000
 
+  # frontend:
+  #   build:
+  #     context: ../frontend
+  #     dockerfile: Dockerfile
+  #   container_name: galaxyrend-frontend
+  #   ports:
+  #     - "3000:3000"
+  #   networks:
+  #     - galaxyrend-net
+  #   volumes:
+  #     - ../frontend:/app
+  #   extra_hosts:
+  #     - "host.docker.internal:host-gateway"
+
   backend:
     build:
       context: ../backend
