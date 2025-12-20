@@ -1,4 +1,4 @@
-# FluxFrame Frontend — One‑Page Summary
+# GalaxyRend Frontend — One‑Page Summary
 
 Purpose: a compact reference for developers — quick start, the reusable BaseLayout contract, dashboard routes, common UI patterns, and fast troubleshooting.
 
@@ -13,7 +13,7 @@ Purpose: a compact reference for developers — quick start, the reusable BaseLa
 
 - `src/components/BaseLayout.tsx` — reusable dashboard layout (background, gradients, header, content wrapper)
 
-# FluxFrame Frontend — One‑Page Summary
+# GalaxyRend Frontend — One‑Page Summary
 
 Purpose: a compact reference for developers — quick start, the reusable BaseLayout contract, dashboard routes, common UI patterns, and fast troubleshooting.
 

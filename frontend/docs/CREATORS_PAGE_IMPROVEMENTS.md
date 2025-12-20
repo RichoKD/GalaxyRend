@@ -26,7 +26,7 @@ Comprehensive redesign of the Creators dashboard page (`/dashboard/creators`) wi
   <Triangle className="text-white w-5 h-5" />
 </div>
 <span className="text-xl font-bold text-slate-200 hidden sm:block">
-  FluxFrame
+  GalaxyRend
 </span>
 ```
 
@@ -35,7 +35,7 @@ Comprehensive redesign of the Creators dashboard page (`/dashboard/creators`) wi
 ```tsx
 <Image
   src="/logo.png"
-  alt="FluxFrame Logo"
+  alt="GalaxyRend Logo"
   width={140}
   height={50}
   className="h-8 sm:h-10 w-auto transition-all duration-300 group-hover:scale-105"

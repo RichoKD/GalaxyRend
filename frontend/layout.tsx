@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "FluxFrame",
+  title: "GalaxyRend",
   description: "Decentralized work platform powered by StarkNet",
 };
 

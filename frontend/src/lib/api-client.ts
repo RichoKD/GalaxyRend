@@ -1,5 +1,5 @@
 /**
- * API Client for FluxFrame Backend
+ * API Client for GalaxyRend Backend
  * Handles all HTTP requests with authentication
  */
 

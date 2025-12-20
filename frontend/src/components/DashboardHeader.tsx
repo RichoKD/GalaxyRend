@@ -39,7 +39,7 @@ export function DashboardHeader({ role = "creator" }: DashboardHeaderProps) {
           >
             <Image
               src="/logo.png"
-              alt="FluxFrame Logo"
+              alt="GalaxyRend Logo"
               width={140}
               height={50}
               className="h-5 sm:h-6 md:h-7 lg:h-8 w-auto transition-all duration-300 group-hover:scale-105"
