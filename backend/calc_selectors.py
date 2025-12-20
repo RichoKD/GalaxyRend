@@ -1,4 +1,4 @@
-from starknet_py.utils.data_serializer.events_serializer import EventsSerializer
+# from starknet_py.utils.data_serializer.events_serializer import EventsSerializer
 from starknet_py.hash.selector import get_selector_from_name
 
 events = [
