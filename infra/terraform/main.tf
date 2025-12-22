@@ -15,13 +15,13 @@ resource "google_project_service" "apis" {
 
 # VPC Network
 resource "google_compute_network" "vpc" {
-  name                    = "fluxframe-vpc"
+  name                    = "galaxyrend-vpc"
   auto_create_subnetworks = false
   depends_on              = [google_project_service.apis]
 }
 
 resource "google_compute_subnetwork" "subnet" {
-  name          = "fluxframe-subnet"
+  name          = "galaxyrend-subnet"
   ip_cidr_range = "10.0.0.0/24"
   region        = var.region
   network       = google_compute_network.vpc.id
@@ -29,7 +29,7 @@ resource "google_compute_subnetwork" "subnet" {
 
 # Serverless VPC Connector (Legacy but reliable for SQL/Redis access from Run)
 resource "google_vpc_access_connector" "connector" {
-  name          = "flux-vpc-conn"
+  name          = "galaxyrend-vpc-conn"
   region        = var.region
   ip_cidr_range = "10.8.0.0/28"
   network       = google_compute_network.vpc.name
@@ -38,7 +38,7 @@ resource "google_vpc_access_connector" "connector" {
 
 # Private Service Access for Cloud SQL & Redis
 resource "google_compute_global_address" "private_ip_address" {
-  name          = "flux-private-ip"
+  name          = "galaxyrend-private-ip"
   purpose       = "VPC_PEERING"
   address_type  = "INTERNAL"
   prefix_length = 16
