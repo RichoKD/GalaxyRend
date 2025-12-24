@@ -3,7 +3,7 @@
   "account": "account-1",
   "contract_name": "JobRegistry",
   "class_hash": "0x22f2e12634ffdc19f3f7f4f96ea940beb6a7f811db19f39aedbd0b70a7eb9e4",
-  "contract_address": "0x0249f668cc6eeacb281b5a30890469de5b588c681fe3d505f100909b21d509f2",
-  "deployed_at": "2025-12-16T16:51:48Z",
+  "contract_address": "0x0431d9319a5e7bf8e9d6fd57df31953ed0db1fc7a5d5e992dfd209df42d00890",
+  "deployed_at": "2025-12-24T08:47:53Z",
   "abi_path": "target/dev/galaxyrend_job_registry_JobRegistry.contract_class.json"
 }

@@ -19,6 +19,7 @@ assert_macros = "2.11.4"
 
 [[target.starknet-contract]]
 sierra = true
+casm = true
 
 [scripts]
 test = "snforge test"
@@ -48,7 +49,15 @@ allow-prebuilt-plugins = ["snforge_std"]
 # url = "http://your.third.rpc.url"
 # block_id.hash = "0x123"                                    # Block to fork from (block hash)
 
-# [profile.dev.cairo]                                        # Configure Cairo compiler
+
+[profile.stark1]
+inherits = "release"
+
+[profile.account-1]
+inherits = "release"
+
+[profile.dev.cairo]
+# Configure Cairo compiler
 # unstable-add-statements-code-locations-debug-info = true   # Should be used if you want to use coverage
 # unstable-add-statements-functions-debug-info = true        # Should be used if you want to use coverage/profiler
 # inlining-strategy = "avoid"                                # Should be used if you want to use coverage

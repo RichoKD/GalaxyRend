@@ -10,6 +10,7 @@ set -e
 NETWORK=${1:-"dev_net"}
 ACCOUNT=${2:-"account-1"}
 BUILD_CONTRACT=${3:-true}
+# RELEASE=${4:-false}
 TOKEN_ADDRESS=${4:-"0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d"} # Sepolia STRK
 
 # echo "[INIT] Waiting for StarkNet Devnet..."
@@ -29,7 +30,11 @@ cd "$(dirname "$0")/../contracts/job_registry"
 if [ "$BUILD_CONTRACT" = true ]; then
     # Build the contract first
     echo "📦 Building contract..."
-    scarb build
+    if [ "$NETWORK" = "mainnet" ]; then
+        scarb build --release
+    else
+        scarb build
+    fi
 fi
 
 # Check if the compiled contract exists
@@ -42,7 +47,7 @@ echo "✅ Contract built successfully"
 
 
 echo "🔍 Validating RPC connection..."
-if [ "$NETWORK" = "dev_net" ] || [ "$NETWORK" = "devnet" ]; then
+if [ "$NETWORK" = "dev_net" ]; then
     RPC_URL="http://localhost:5050"
     # Test devnet connection
     if ! curl -s -f "$RPC_URL/is_alive" > /dev/null; then
@@ -51,9 +56,11 @@ if [ "$NETWORK" = "dev_net" ] || [ "$NETWORK" = "devnet" ]; then
         exit 1
     fi
 elif [ "$NETWORK" = "sepolia" ]; then
-    RPC_URL="https://starknet-sepolia.public.blastapi.io/rpc/v0_7"
-else
-    RPC_URL="https://starknet-mainnet.public.blastapi.io/rpc/v0_7"
+    # RPC_URL="https://starknet-sepolia.public.blastapi.io/rpc/v0_8"
+    RPC_URL="https://api.cartridge.gg/x/starknet/sepolia/rpc/v0_9"
+elif [ "$NETWORK" = "mainnet" ]; then
+    RPC_URL="https://api.cartridge.gg/x/starknet/mainnet/rpc/v0_9"
+    # RPC_URL="https://starknet-mainnet.public.blastapi.io/rpc/v0_8"
 fi
 
 # Test RPC connection
