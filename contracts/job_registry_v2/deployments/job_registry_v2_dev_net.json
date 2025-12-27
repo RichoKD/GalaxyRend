@@ -1,0 +1,9 @@
+{
+  "network": "dev_net",
+  "account": "account-1",
+  "contract_name": "JobRegistryV2",
+  "class_hash": "0x31c3dec62ef7068d85dcb870a914189bb391425ceae9e5b9568f53516dece1f",
+  "contract_address": "0x073d0946cf7d463641808d4576edccb856d5c1876dd0c38da9480bb7abb25a38",
+  "deployed_at": "2025-12-27T08:26:52Z",
+  "abi_path": "target/dev/galaxyrend_job_registry_JobRegistryV2.contract_class.json"
+}

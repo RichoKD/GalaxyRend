@@ -9,7 +9,7 @@ set -e
 # Default values
 NETWORK=${1:-"dev_net"}
 ACCOUNT=${2:-"account-1"}
-BUILD_CONTRACT=${3:-true}
+BUILD_CONTRACT=${3:-false}
 # RELEASE=${4:-false}
 TOKEN_ADDRESS=${4:-"0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d"} # Sepolia STRK
 
@@ -25,7 +25,7 @@ echo "Network: $NETWORK"
 echo "Account: $ACCOUNT"
 
 # Change to contract directory
-cd "$(dirname "$0")/../contracts/job_registry"
+cd "$(dirname "$0")/../contracts/job_registry_v2"
 
 if [ "$BUILD_CONTRACT" = true ]; then
     # Build the contract first
@@ -38,7 +38,7 @@ if [ "$BUILD_CONTRACT" = true ]; then
 fi
 
 # Check if the compiled contract exists
-if [ ! -f "target/dev/galaxyrend_job_registry_JobRegistry.contract_class.json" ]; then
+if [ ! -f "target/dev/galaxyrend_job_registry_v2_JobRegistryV2.contract_class.json" ]; then
     echo "❌ Contract compilation failed - contract class file not found"
     exit 1
 fi
@@ -56,11 +56,9 @@ if [ "$NETWORK" = "dev_net" ]; then
         exit 1
     fi
 elif [ "$NETWORK" = "sepolia" ]; then
-    # RPC_URL="https://starknet-sepolia.public.blastapi.io/rpc/v0_8"
-    RPC_URL="https://api.cartridge.gg/x/starknet/sepolia/rpc/v0_9"
+    RPC_URL="https://api.cartridge.gg/x/starknet/sepolia/rpc/v0_8"
 elif [ "$NETWORK" = "mainnet" ]; then
-    RPC_URL="https://api.cartridge.gg/x/starknet/mainnet/rpc/v0_9"
-    # RPC_URL="https://starknet-mainnet.public.blastapi.io/rpc/v0_8"
+    RPC_URL="https://api.cartridge.gg/x/starknet/mainnet/rpc/v0_8"
 fi
 
 # Test RPC connection
@@ -74,9 +72,11 @@ fi
 echo "✅ RPC connection validated"
 
 
+
+
 # Deploy the contract
 echo "🔧 Declaring contract..."
-DECLARE_OUTPUT=$(sncast --profile $ACCOUNT declare --contract-name JobRegistry 2>&1)
+DECLARE_OUTPUT=$(sncast --profile $ACCOUNT declare --contract-name JobRegistryV2 2>&1)
 
 # Check if contract is already declared
 if echo "$DECLARE_OUTPUT" | grep -q "already declared"; then
@@ -90,7 +90,7 @@ if echo "$DECLARE_OUTPUT" | grep -q "already declared"; then
         echo "$DECLARE_OUTPUT"
 
         # Check deploment file
-        DEPLOYMENT_FILE="deployments/job_registry_${NETWORK}.json"
+        DEPLOYMENT_FILE="deployments/job_registry_v2_${NETWORK}.json"
         if [ -f "$DEPLOYMENT_FILE" ]; then
             echo "⚠️  Deployment file already exists for network '$NETWORK': $DEPLOYMENT_FILE"
             CLASS_HASH=$(grep -o '"class_hash": "[^"]*"' "$DEPLOYMENT_FILE" | cut -d'"' -f4)
@@ -180,18 +180,18 @@ echo "Contract Address: $CONTRACT_ADDRESS"
 echo ""
 
 # Save deployment info to a file
-DEPLOYMENT_FILE="deployments/job_registry_${NETWORK}.json"
+DEPLOYMENT_FILE="deployments/job_registry_v2_${NETWORK}.json"
 mkdir -p deployments
 
 cat > "$DEPLOYMENT_FILE" << EOF
 {
   "network": "$NETWORK",
   "account": "$ACCOUNT",
-  "contract_name": "JobRegistry",
+  "contract_name": "JobRegistryV2",
   "class_hash": "$CLASS_HASH",
   "contract_address": "$CONTRACT_ADDRESS",
   "deployed_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-  "abi_path": "target/dev/galaxyrend_job_registry_JobRegistry.contract_class.json"
+  "abi_path": "target/dev/galaxyrend_job_registry_JobRegistryV2.contract_class.json"
 }
 EOF
 
@@ -210,6 +210,7 @@ elif [ "$NETWORK" = "mainnet" ]; then
 else
     RPC_URL="http://localhost:5050"  # devnet default
 fi
+
 
 # Create worker/src directory if it doesn't exist
 # mkdir -p worker/src

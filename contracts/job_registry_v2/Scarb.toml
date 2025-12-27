@@ -1,5 +1,5 @@
 [package]
-name = "galaxyrend_job_registry"
+name = "galaxyrend_job_registry_v2"
 version = "2.0.0"
 edition = "2024_07"
 
@@ -16,6 +16,8 @@ openzeppelin_security = "2.0.0"
 [dev-dependencies]
 snforge_std = "0.52.0"
 assert_macros = "2.11.4"
+
+# scarb 2.11.4
 
 [[target.starknet-contract]]
 sierra = true
@@ -53,8 +55,8 @@ allow-prebuilt-plugins = ["snforge_std"]
 [profile.stark1]
 inherits = "release"
 
-[profile.account-1]
-inherits = "release"
+#[profile.account-1]
+#inherits = "release"
 
 [profile.dev.cairo]
 # Configure Cairo compiler

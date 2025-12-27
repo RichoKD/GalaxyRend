@@ -13,7 +13,7 @@ ACCOUNT=${4:-"stark1"}
 
 if [ -z "$CONTRACT_ADDRESS" ]; then
     # Try to read from deployment file
-    DEPLOYMENT_FILE="../contracts/job_registry/deployments/job_registry_${NETWORK}.json"
+    DEPLOYMENT_FILE="../contracts/job_registry_v2/deployments/job_registry_v2_${NETWORK}.json"
     if [ -f "$DEPLOYMENT_FILE" ]; then
         CONTRACT_ADDRESS=$(grep -o '"contract_address": "[^"]*"' "$DEPLOYMENT_FILE" | cut -d'"' -f4)
         echo "📖 Read contract address from deployment file: $CONTRACT_ADDRESS"
@@ -31,7 +31,7 @@ echo "Token: $TOKEN_ADDRESS"
 echo "Account: $ACCOUNT"
 echo ""
 
-cd "$(dirname "$0")/../contracts/job_registry"
+cd "$(dirname "$0")/../contracts/job_registry_v2"
 
 # Step 1: Test basic contract functions
 echo "1️⃣ Testing contract connectivity..."
