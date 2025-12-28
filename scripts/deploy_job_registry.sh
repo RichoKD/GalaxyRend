@@ -197,7 +197,7 @@ cat > "$DEPLOYMENT_FILE" << EOF
   "class_hash": "$CLASS_HASH",
   "contract_address": "$CONTRACT_ADDRESS",
   "deployed_at": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-  "abi_path": "target/dev/galaxyrend_job_registry_JobRegistryV2.contract_class.json"
+  "abi_path": "target/dev/galaxyrend_job_registry_v2_JobRegistryV2.contract_class.json"
 }
 EOF
 
