@@ -114,7 +114,7 @@ export function useWallet() {
             },
             primaryType: "Message",
             domain: {
-              name: "FluxFrame",
+              name: "GalaxyRend",
               chainId: await provider.provider.getChainId(),
             },
             message: {
@@ -145,7 +145,7 @@ export function useWallet() {
                 },
                 primaryType: "Message",
                 domain: {
-                  name: "FluxFrame",
+                  name: "GalaxyRend",
                 },
                 message: {
                   msg: shortMsg,

@@ -179,7 +179,7 @@ export default function DashboardPage() {
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 mb-4">
             <Sparkles className="w-4 h-4 text-blue-400" />
             <span className="text-sm text-blue-300 font-medium">
-              Welcome to FluxFrame
+              Welcome to GalaxyRend
             </span>
           </div>
 
@@ -188,7 +188,7 @@ export default function DashboardPage() {
           </h1>
 
           <p className="text-lg md:text-xl text-slate-400 max-w-2xl mx-auto">
-            Select how you want to participate in the FluxFrame ecosystem. You
+            Select how you want to participate in the GalaxyRend ecosystem. You
             can always change this later.
           </p>
         </div>

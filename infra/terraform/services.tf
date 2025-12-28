@@ -1,6 +1,6 @@
 # Backend Service
 resource "google_cloud_run_v2_service" "backend" {
-  name     = "fluxframe-backend"
+  name     = "galaxyrend-backend"
   location = var.region
   ingress  = "INGRESS_TRAFFIC_ALL"
 
@@ -9,13 +9,13 @@ resource "google_cloud_run_v2_service" "backend" {
       connector = google_vpc_access_connector.connector.id
       egress    = "ALL_TRAFFIC"
     }
-    
+
     containers {
       image = var.backend_image
-      ports { 
-        container_port = 8000 
+      ports {
+        container_port = 8000
       }
-      
+
       env {
         name  = "DATABASE_URL"
         value = "postgresql+asyncpg://postgres:${var.db_password}@${google_sql_database_instance.main.private_ip_address}/galaxyrend_db"
@@ -25,7 +25,7 @@ resource "google_cloud_run_v2_service" "backend" {
         value = "redis://${google_redis_instance.cache.host}:${google_redis_instance.cache.port}"
       }
       env {
-        name = "STARKNET_RPC_URL"
+        name  = "STARKNET_RPC_URL"
         value = "https://starknet-goerli.infura.io/v3/YOUR_API_KEY" # Placeholder
       }
       # Add other env vars as needed
@@ -36,7 +36,7 @@ resource "google_cloud_run_v2_service" "backend" {
 
 # Worker Service
 resource "google_cloud_run_v2_service" "worker" {
-  name     = "fluxframe-worker"
+  name     = "galaxyrend-worker"
   location = var.region
 
   template {
@@ -47,7 +47,7 @@ resource "google_cloud_run_v2_service" "worker" {
 
     containers {
       image = var.worker_image
-      
+
       resources {
         limits = {
           cpu    = "2"
@@ -69,15 +69,15 @@ resource "google_cloud_run_v2_service" "worker" {
 
 # Frontend Service
 resource "google_cloud_run_v2_service" "frontend" {
-  name     = "fluxframe-frontend"
+  name     = "galaxyrend-frontend"
   location = var.region
   ingress  = "INGRESS_TRAFFIC_ALL"
 
   template {
     containers {
       image = var.frontend_image
-      ports { 
-        container_port = 3000 
+      ports {
+        container_port = 3000
       }
       env {
         name  = "NEXT_PUBLIC_API_URL"

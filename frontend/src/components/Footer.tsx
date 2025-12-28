@@ -102,7 +102,7 @@ const FooterSection = () => {
                   className="underline transition-colors hover:text-cyan-400"
                   target="_blank"
                 >
-                  FluxFrame
+                  GalaxyRend
                 </a>
               </p>
               <div className="flex items-center gap-5">

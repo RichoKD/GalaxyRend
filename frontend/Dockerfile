@@ -1,56 +1,44 @@
-
-# FROM oven/bun:1 AS base
-FROM node:20-alpine AS runner
-
-# Install dependencies only when needed
-# FROM base AS deps
+# Build stage
+FROM node:20-alpine AS builder
 WORKDIR /app
-
-# Copy dependency definitions
-COPY package.json ./
-# Install dependencies
-# RUN bun install
-# --frozen-lockfile
-
-# Rebuild the source code only when needed
-# FROM base AS builder
-# WORKDIR /app
-# COPY --from=deps /app/node_modules ./node_modules
+COPY package*.json ./
+RUN npm install
 COPY . .
+RUN npm run build && npm prune --production
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT_TELEMETRY_DISABLED=1
+# Production stage
+FROM node:20-alpine
+RUN addgroup -S appgroup && adduser -S appuser -G appgroup
+WORKDIR /app
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/public ./public
+RUN chown -R appuser:appgroup /app
+USER appuser
+EXPOSE 8080
+ENV PORT 8080
+CMD ["node", "server.js"]   
 
-# RUN bun run build
 
-# Production image, copy all the files and run next
+
+
+
+
+
+# syntax = docker/dockerfile:1
+# FROM node:22-alpine AS builder
 # WORKDIR /app
 
-ENV NODE_ENV=production
+# COPY package*.json ./
+# RUN npm ci
 
+# COPY . .
+# RUN npm run build
 
-# RUN addgroup --system --gid 1001 nodejs
-# RUN adduser --system --uid 1001 nextjs
+# FROM node:22-alpine AS runner
+# WORKDIR /app
 
-# COPY --from=builder /app/public ./public
+# COPY --from=builder /app ./
 
-# Set the correct permission for prerender cache
-# RUN mkdir .next
-# RUN chown nextjs:nodejs .next
-
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-# COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-# COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-# USER nextjs
-
-EXPOSE 3000
-
-ENV PORT=3000
-# set hostname to localhost
-ENV HOSTNAME="0.0.0.0"
-
-CMD ["node", "server.js"]
+# EXPOSE 3000
+# CMD ["npm", "start"]   

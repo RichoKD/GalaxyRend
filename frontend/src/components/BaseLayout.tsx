@@ -97,7 +97,7 @@ export default function BaseLayout({
               <Link href="/" className="flex items-center gap-2 group shrink-0">
                 <Image
                   src="/logo.png"
-                  alt="FluxFrame Logo"
+                  alt="GalaxyRend Logo"
                   width={140}
                   height={50}
                   className="h-8 sm:h-10 w-auto transition-all duration-300 group-hover:scale-105"
