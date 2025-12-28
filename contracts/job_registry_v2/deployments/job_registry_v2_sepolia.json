@@ -1,0 +1,9 @@
+{
+  "network": "sepolia",
+  "account": "stark1",
+  "contract_name": "JobRegistryV2",
+  "class_hash": "0x282f8cb7a7f399a536b67f85715848fa9138be08d174faa0ea8af473d36fccb",
+  "contract_address": "0x039a3dd62c36f73a8b84058ede5945758e2b9588c190f6855fca6aa811362bc5",
+  "deployed_at": "2025-12-28T11:18:33Z",
+  "abi_path": "target/dev/galaxyrend_job_registry_JobRegistryV2.contract_class.json"
+}

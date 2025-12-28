@@ -9,14 +9,17 @@ set -e
 # Default values
 NETWORK=${1:-"dev_net"}
 ACCOUNT=${2:-"account-1"}
-BUILD_CONTRACT=${3:-false}
+DECLARE=${3:-false}
+BUILD_CONTRACT=${4:-false}
 # RELEASE=${4:-false}
-TOKEN_ADDRESS=${4:-"0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d"} # Sepolia STRK
+TOKEN_ADDRESS=${5:-"0x04718f5a0fc34cc1af16a1cdee98ffb20c31f5cd61d6ab07201858f4287c938d"} # Sepolia STRK
 
 # echo "[INIT] Waiting for StarkNet Devnet..."
 # until curl -s $URL/is_alive > /dev/null; do
 #     sleep 2
 # done
+
+CLASS_HASH=""
 
 echo "Foundry version: $(sncast --version)"
 
@@ -56,9 +59,11 @@ if [ "$NETWORK" = "dev_net" ]; then
         exit 1
     fi
 elif [ "$NETWORK" = "sepolia" ]; then
-    RPC_URL="https://api.cartridge.gg/x/starknet/sepolia/rpc/v0_8"
+    RPC_URL="https://api.cartridge.gg/x/starknet/sepolia"
+    CLASS_HASH="0x282f8cb7a7f399a536b67f85715848fa9138be08d174faa0ea8af473d36fccb"
 elif [ "$NETWORK" = "mainnet" ]; then
-    RPC_URL="https://api.cartridge.gg/x/starknet/mainnet/rpc/v0_8"
+    RPC_URL="https://api.cartridge.gg/x/starknet/mainnet"
+    CLASS_HASH=""
 fi
 
 # Test RPC connection
@@ -73,59 +78,60 @@ echo "✅ RPC connection validated"
 
 
 
-
-# Deploy the contract
+if [ "$DECLARE" = true ]; then
+    # Deploy the contract
 echo "🔧 Declaring contract..."
 DECLARE_OUTPUT=$(sncast --profile $ACCOUNT declare --contract-name JobRegistryV2 2>&1)
 
 # Check if contract is already declared
-if echo "$DECLARE_OUTPUT" | grep -q "already declared"; then
-    echo "ℹ️  Contract is already declared, extracting class hash from error message..."
-    # Extract class hash from "already declared" error message
-    CLASS_HASH=$(echo "$DECLARE_OUTPUT" | grep -o "0x[a-fA-F0-9]\{64\}" | head -1)
-    if [ -n "$CLASS_HASH" ]; then
-        echo "✅ Found existing class hash: $CLASS_HASH"
-    else
-        echo "❌ Could not extract class hash from already declared error:"
-        echo "$DECLARE_OUTPUT"
-
-        # Check deploment file
-        DEPLOYMENT_FILE="deployments/job_registry_v2_${NETWORK}.json"
-        if [ -f "$DEPLOYMENT_FILE" ]; then
-            echo "⚠️  Deployment file already exists for network '$NETWORK': $DEPLOYMENT_FILE"
-            CLASS_HASH=$(grep -o '"class_hash": "[^"]*"' "$DEPLOYMENT_FILE" | cut -d'"' -f4)
-            echo "Using existing class hash: $CLASS_HASH"
+    if echo "$DECLARE_OUTPUT" | grep -q "already declared"; then
+        echo "ℹ️  Contract is already declared, extracting class hash from error message..."
+        # Extract class hash from "already declared" error message
+        CLASS_HASH=$(echo "$DECLARE_OUTPUT" | grep -o "0x[a-fA-F0-9]\{64\}" | head -1)
+        if [ -n "$CLASS_HASH" ]; then
+            echo "✅ Found existing class hash: $CLASS_HASH"
         else
-            exit 1
+            echo "❌ Could not extract class hash from already declared error:"
+            echo "$DECLARE_OUTPUT"
+
+            # Check deploment file
+            DEPLOYMENT_FILE="deployments/job_registry_v2_${NETWORK}.json"
+            if [ -f "$DEPLOYMENT_FILE" ]; then
+                echo "⚠️  Deployment file already exists for network '$NETWORK': $DEPLOYMENT_FILE"
+                CLASS_HASH=$(grep -o '"class_hash": "[^"]*"' "$DEPLOYMENT_FILE" | cut -d'"' -f4)
+                echo "Using existing class hash: $CLASS_HASH"
+            else
+                exit 1
+            fi
         fi
-    fi
-elif echo "$DECLARE_OUTPUT" | grep -q "error"; then
-    echo "❌ Contract declaration failed:"
-    echo "$DECLARE_OUTPUT"
-    exit 1
-else
-    # Extract class hash from successful declare output (new format in sncast 0.52.0)
-    # Look for "Class Hash: 0x..." pattern
-    CLASS_HASH=$(echo "$DECLARE_OUTPUT" | grep "Class Hash:" | grep -o "0x[a-fA-F0-9]*" | head -1)
-    
-    if [ -z "$CLASS_HASH" ]; then
-        # Try old format: "class_hash: 0x..."
-        CLASS_HASH=$(echo "$DECLARE_OUTPUT" | grep -o "class_hash: 0x[a-fA-F0-9]*" | cut -d' ' -f2)
-    fi
-    
-    if [ -z "$CLASS_HASH" ]; then
-        # Try extracting any 64-character hex string (class hash format)
-        CLASS_HASH=$(echo "$DECLARE_OUTPUT" | grep -o "0x[a-fA-F0-9]\{63,64\}" | head -1)
-    fi
-    
-    if [ -z "$CLASS_HASH" ]; then
-        echo "❌ Could not extract class hash from declare output:"
+    elif echo "$DECLARE_OUTPUT" | grep -q "error"; then
+        echo "❌ Contract declaration failed:"
         echo "$DECLARE_OUTPUT"
         exit 1
+    else
+        # Extract class hash from successful declare output (new format in sncast 0.52.0)
+        # Look for "Class Hash: 0x..." pattern
+        CLASS_HASH=$(echo "$DECLARE_OUTPUT" | grep "Class Hash:" | grep -o "0x[a-fA-F0-9]*" | head -1)
+        
+        if [ -z "$CLASS_HASH" ]; then
+            # Try old format: "class_hash: 0x..."
+            CLASS_HASH=$(echo "$DECLARE_OUTPUT" | grep -o "class_hash: 0x[a-fA-F0-9]*" | cut -d' ' -f2)
+        fi
+        
+        if [ -z "$CLASS_HASH" ]; then
+            # Try extracting any 64-character hex string (class hash format)
+            CLASS_HASH=$(echo "$DECLARE_OUTPUT" | grep -o "0x[a-fA-F0-9]\{63,64\}" | head -1)
+        fi
+        
+        if [ -z "$CLASS_HASH" ]; then
+            echo "❌ Could not extract class hash from declare output:"
+            echo "$DECLARE_OUTPUT"
+            exit 1
+        fi
+        
+        echo "✅ Contract declared successfully"
+        echo "Class Hash: $CLASS_HASH"
     fi
-    
-    echo "✅ Contract declared successfully"
-    echo "Class Hash: $CLASS_HASH"
 fi
 
 # Deploy the contract with constructor arguments
