@@ -79,7 +79,7 @@ services:
       dockerfile: Dockerfile
     container_name: galaxyrend-worker
     env_file:
-      - ./worker.env
+      - ./.worker.env
     depends_on:
       - backend
       - ipfs-node
